@@ -1,0 +1,268 @@
+﻿body{
+    margin: 0px;
+    padding:0px;
+}
+
+nav{
+    width:100%;
+    background-color:black;
+    overflow:auto;    
+}
+
+ul{
+    padding:0;
+    margin:0 0 0 250px;
+    list-style:none;    
+}
+
+li{
+    float:left;
+}
+
+.nav-logo img{
+    position:absolute;
+    margin-left:10px;
+    margin-top:11px;
+    width:210px;
+    height:48px;
+
+}
+
+nav a{
+    width:100px;
+    display:block;
+    padding:20px 15px;
+    text-decoration:none;
+    font-family:Arial;
+    color:#f2f2f2;
+    text-align:center;
+}
+
+nav a:hover{
+    background-color:#FBAD17;
+    transition:1s;
+    text-transform:uppercase;
+    color:black;
+}
+
+.intro{
+    width:100%;
+    height:600px;
+    color:white;
+    background-color:black;
+}
+
+.intro img{
+    height:600px;
+    margin-left:200px;
+}    
+
+.intro-image{
+    width:40%;
+    float:left;
+}
+.intro-text{
+    width:60%;
+    float:left;
+    text-align:left;
+}
+
+.intro-text h1{
+    font-size:150px;
+    margin-left:100px;
+    margin-top:180px;
+    font-family:'Freestyle Script';
+}
+
+    .intro-text h3 {
+        font-size: 50px;
+        margin-left: 100px;
+        font-family: 'Freestyle Script';
+        position:relative;
+        top:-80px;
+    }
+
+    .mywork{
+        width:100%;
+        height:600px;   
+        
+    }
+
+        .mywork h1 {
+            text-align: center;
+            font-size: 60px;
+            font-family:'Times New Roman';
+            font-weight:900;
+        }
+
+.mywork-hline {
+    width: 20%;
+    height: 2px;
+    background-color: darkgrey;
+    /*margin-left:402px;*/
+    position: relative;
+    top: -20px;
+    margin:auto;    
+}
+
+.work-mywork {
+    width: 33.3%;
+    height: 450px;
+    /*background-color:pink;*/
+    float: left;
+    text-align: center;
+}
+/*
+.work2-mywork {
+    width: 33.3%;
+    background-color: brown;
+    height: 300px;
+    float: left;
+    text-align: center;
+}
+
+.work3-mywork {
+    width: 33.3%;
+    background-color: coral;
+    height: 300px;
+    float: left;
+    text-align: center;
+}
+*/
+
+.detail-mywork h2 {
+    font-size: 32px;
+}
+
+.detail-mywork p{
+    margin-left:10%;
+    margin-right:10%;
+}
+
+.about{
+    width:100%;
+    height:300px;
+    background-color:black;
+    background-image:url(Things/image-about5.jpg);
+    background-position:center;
+}
+/*
+    .about img {
+        position: relative;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: auto;
+        opacity: 0.6;        
+        
+    }
+    */
+
+.info-about{
+    text-align:center;
+}
+
+.info-about h1{
+    color:white;
+    font-size:60px;
+    position:relative;
+    top:20px;
+}
+
+.text-about{
+    color:white;
+    margin:0 70px 0 70px;
+    font-size:22px;    
+}
+
+#txt-about{
+    position:relative;
+    top:24px;
+}
+
+.mycv {
+    width: 100%;
+    height: 500px;
+    /*background-color:black;*/
+    position: relative;
+    top: 50px;
+    background-image:url(Things/image-mycv3.png);
+    background-repeat:no-repeat;
+    background-size:400px;
+    
+}
+
+.mycv h1{
+    font-size:110px;
+    margin-left:350px;
+    position:relative;
+    top:80px;
+    font-family:'Freestyle Script';    
+}
+
+    .mycv h3 {
+        font-size: 80px;
+        margin-left: 350px;        
+        font-family: 'Freestyle Script';
+    }
+
+    .mycv a {
+        margin-left: 350px;
+        width: 150px;
+        display: block;
+        height: 45px;
+        text-decoration: none;
+        background-color: #FBAD17;
+        color: #000000;
+        text-align: center;
+        -moz-border-radius: 10px;
+        -webkit-border-radius: 5px;
+        line-height: 45px;
+        /*font-family:'Freestyle Script';*/
+        font-size: 20px;
+        font-weight: 700;
+        position: relative;
+        top: -35px;        
+    }
+
+.contact {
+    width: 100%;
+    height: 400px;
+    background-color:lightgray; 
+    text-align: center;
+}
+
+.contact h1{
+    font-size:60px;
+    color:black;
+    position:relative;
+    top:30px;
+}
+
+.left-contact {
+    width: 50%;
+    height: 270px;
+    /*background-color:aqua;*/
+    float: left;
+}
+
+.left-contact h3,p{
+    position:relative;
+    top:30px;
+}
+
+.vline-contact{
+    width:0.2%;
+    float:left;
+    background-color:darkgray;
+    height:200px;
+    position:relative;
+    top:40px;
+}
+
+.right-contact {
+    float: left;
+    width: 49.8%;
+    /*background-color:blueviolet;*/
+    height: 270px;
+}

@@ -423,7 +423,7 @@
 }
 
 .title-accent {
-  display: block;
+  /* display: block; */
   background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -774,12 +774,12 @@
   display: inline-block;
 }
 
-.title-accent {
+/* .title-accent {
   background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-}
+} */
 
 .title-underline {
   width: 80px;
@@ -864,6 +864,247 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 30px;
+}
+
+.stat-card {
+  background: rgba(30, 41, 59, 0.8);
+
+}
+
+.resume-section {
+  padding: 120px 0;
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.55) 0%, rgba(30, 41, 59, 0.55) 100%);
+}
+
+.resume-intro {
+  max-width: 900px;
+  margin: 0 auto 45px;
+  color: #cbd5e1;
+  text-align: center;
+  line-height: 1.8;
+}
+
+.resume-highlight-list {
+  margin-top: 24px;
+  display: grid;
+  gap: 12px;
+  list-style: disc inside;
+  color: #cbd5e1;
+  text-align: left;
+  max-width: 760px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.resume-card {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 30px;
+}
+
+.resume-sidebar {
+  background: rgba(30, 41, 59, 0.88);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  border-radius: 30px;
+  padding: 30px;
+}
+
+.resume-profile-card {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.resume-profile-avatar {
+  width: 100px;
+  height: 100px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 24px;
+  background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
+  color: #fff;
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 20px;
+}
+
+.resume-profile-card h3 {
+  color: #e2e8f0;
+  margin-bottom: 8px;
+}
+
+.resume-profile-card p {
+  color: #94a3b8;
+}
+
+.resume-box {
+  margin-bottom: 30px;
+}
+
+.resume-box h4 {
+  color: #fff;
+  margin-bottom: 18px;
+  font-size: 0.95rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.resume-box p {
+  color: #cbd5e1;
+  line-height: 1.8;
+  font-size: 0.95rem;
+}
+
+.resume-skill-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.resume-skill-pill {
+  display: inline-flex;
+  padding: 10px 14px;
+  border-radius: 9999px;
+  background: rgba(96, 165, 250, 0.12);
+  color: #cbd5e1;
+  font-size: 0.82rem;
+  border: 1px solid rgba(96, 165, 250, 0.14);
+}
+
+.resume-action {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+}
+
+.resume-page-view {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0b1221 0%, #111827 100%);
+  padding: 100px 20px 80px;
+}
+
+.resume-page-header {
+  max-width: 1200px;
+  margin: 0 auto 30px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.resume-page-back {
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 28px;
+  border-radius: 9999px;
+  background: rgba(96, 165, 250, 0.15);
+  color: #e2e8f0;
+  border: 1px solid rgba(96, 165, 250, 0.35);
+  transition: all 0.25s ease;
+}
+
+.resume-page-back:hover {
+  transform: translateY(-2px);
+  background: rgba(96, 165, 250, 0.25);
+}
+
+.resume-main {
+  background: rgba(15, 23, 42, 0.88);
+  backdrop-filter: blur(16px);
+  border-radius: 30px;
+  padding: 40px;
+  border: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+.resume-block {
+  margin-bottom: 40px;
+}
+
+.resume-block h3 {
+  font-size: 1.7rem;
+  color: #fff;
+  margin-bottom: 18px;
+}
+
+.resume-block p,
+.resume-block ul {
+  color: #cbd5e1;
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+.resume-block ul {
+  padding-left: 20px;
+  margin-top: 15px;
+}
+
+.timeline {
+  border-left: 2px solid rgba(148, 163, 184, 0.18);
+  padding-left: 24px;
+  display: grid;
+  gap: 24px;
+}
+
+.timeline-entry {
+  display: grid;
+  gap: 12px;
+  position: relative;
+}
+
+.timeline-marker {
+  position: absolute;
+  left: -34px;
+  top: 5px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #60a5fa;
+  box-shadow: 0 0 0 6px rgba(15, 23, 42, 0.65);
+}
+
+.timeline-meta {
+  color: #94a3b8;
+  font-size: 0.95rem;
+  margin-bottom: 12px;
+}
+
+.education-grid {
+  display: grid;
+  gap: 20px;
+}
+
+.education-card {
+  background: rgba(30, 41, 59, 0.85);
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  border-radius: 22px;
+  padding: 24px;
+  color: #cbd5e1;
+}
+
+.education-card h4 {
+  color: #fff;
+  margin-bottom: 8px;
+}
+
+.education-date {
+  color: #94a3b8;
+  font-size: 0.95rem;
+  margin-top: 10px;
+}
+
+@media (max-width: 992px) {
+  .resume-card {
+    grid-template-columns: 1fr;
+  }
+
+  .resume-sidebar {
+    order: 2;
+  }
+
+  .resume-main {
+    order: 1;
+  }
 }
 
 .stat-card {

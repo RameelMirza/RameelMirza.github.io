@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import './App.css'
+import Resume from './Resume.jsx'
+import ResumePage from './ResumePage.jsx'
 import { SiJavascript, SiReact, SiHtml5, SiSass, SiGit, SiBootstrap, SiTailwindcss, SiPhp, SiLaravel, SiNodedotjs, SiPython, SiPostgresql, SiWordpress, SiShopify, SiWix, SiModx, SiWebflow } from 'react-icons/si'
 
 const SkillIcon = ({ skillName }) => {
@@ -53,6 +55,7 @@ const SkillIcon = ({ skillName }) => {
 
 function App() {
   const [activeSection, setActiveSection] = useState('home')
+  const [activeHash, setActiveHash] = useState(window.location.hash)
   const [isLoading, setIsLoading] = useState(true)
   const [navbarScrolled, setNavbarScrolled] = useState(false)
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
@@ -127,7 +130,7 @@ function App() {
       setNavbarScrolled(scrollTop > 50)
 
       // Update active section
-      const sections = ['home', 'about', 'skills', 'projects', 'contact']
+      const sections = ['home', 'about', 'resume', 'skills', 'projects', 'contact']
       const currentSection = sections.find(section => {
         const element = document.getElementById(section)
         if (element) {
@@ -177,8 +180,11 @@ function App() {
       animateElements.forEach(el => observer.observe(el))
     }, 100)
 
+    const handleHashChange = () => setActiveHash(window.location.hash)
+
     window.addEventListener('scroll', handleScroll)
     window.addEventListener('mousemove', handleMouseMove)
+    window.addEventListener('hashchange', handleHashChange)
     handleScroll()
     createParticles()
 
@@ -186,6 +192,7 @@ function App() {
       clearTimeout(timer)
       window.removeEventListener('scroll', handleScroll)
       window.removeEventListener('mousemove', handleMouseMove)
+      window.removeEventListener('hashchange', handleHashChange)
       observer.disconnect()
     }
   }, [])
@@ -195,6 +202,10 @@ function App() {
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' })
     }
+  }
+
+  if (activeHash === '#resume-page') {
+    return <ResumePage />
   }
 
   return (
@@ -241,6 +252,7 @@ function App() {
               {[
                 { id: 'home', label: 'Home' },
                 { id: 'about', label: 'About' },
+                { id: 'resume', label: 'Resume' },
                 { id: 'skills', label: 'Skills' },
                 { id: 'projects', label: 'Projects' },
                 { id: 'contact', label: 'Contact' }
@@ -300,6 +312,9 @@ function App() {
                   <span>View My Work</span>
                   <div className="btn-glow"></div>
                 </button>
+                {/* <button className="btn btn-secondary" onClick={() => scrollToSection('resume')}>
+                  <span>View Resume</span>
+                </button> */}
                 <button className="btn btn-secondary" onClick={() => scrollToSection('contact')}>
                   <span>Get In Touch</span>
                 </button>
@@ -408,6 +423,8 @@ function App() {
             </div>
           </div>
         </section>
+
+        <Resume />
 
         {/* Skills Section */}
         <section id="skills" className="skills-section">
@@ -567,6 +584,7 @@ function App() {
               <div className="footer-links">
                 <a href="#home" onClick={(e) => { e.preventDefault(); scrollToSection('home'); }}>Home</a>
                 <a href="#about" onClick={(e) => { e.preventDefault(); scrollToSection('about'); }}>About</a>
+                <a href="#resume" onClick={(e) => { e.preventDefault(); scrollToSection('resume'); }}>Resume</a>
                 <a href="#skills" onClick={(e) => { e.preventDefault(); scrollToSection('skills'); }}>Skills</a>
                 <a href="#projects" onClick={(e) => { e.preventDefault(); scrollToSection('projects'); }}>Projects</a>
                 <a href="#contact" onClick={(e) => { e.preventDefault(); scrollToSection('contact'); }}>Contact</a>

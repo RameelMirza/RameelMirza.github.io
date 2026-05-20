@@ -175,6 +175,7 @@ function Resume({ showOpenButton = true }) {
         )} */}
       </div>
     </section>
+    
   )
 }
 

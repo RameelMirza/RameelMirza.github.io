@@ -1098,13 +1098,13 @@
     grid-template-columns: 1fr;
   }
 
-  .resume-sidebar {
+  /* .resume-sidebar {
     order: 2;
   }
 
   .resume-main {
     order: 1;
-  }
+  } */
 }
 
 .stat-card {
@@ -1762,6 +1762,12 @@
   .footer-copyright {
     order: 2;
     text-align: center;
+  }
+}
+
+@media (max-width: 600px) {
+  .about-stats .stats-grid {
+    grid-template-columns: repeat(1, 1fr);
   }
 }
 

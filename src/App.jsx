@@ -88,7 +88,7 @@ function App() {
       tech: ['MODX', 'PHP', 'HTML', 'CSS', 'JavaScript', 'Responsive Design'],
       github: '#',
       demo: 'https://www.igloofoam.com/',
-      image: '/public/images/igloo.png'
+      image: '/images/igloo.png'
     },
     {
       title: 'Travel Agency Website',
@@ -104,7 +104,7 @@ function App() {
       tech: ['Shopify', 'AI Integration', 'Liquid', 'E-Commerce'],
       github: '#',
       demo: 'https://nail-ve.com/',
-      image: '/public/images/nail-ve.png'
+      image: '/images/nail-ve.png'
     },
     {
       title: 'Custom Booking Platform',
@@ -112,7 +112,7 @@ function App() {
       tech: ['Laravel', 'PHP', 'MySQL', 'REST API'],
       github: '#',
       demo: 'https://luxustars.com/',
-      image: '/public/images/luxustars.png'
+      image: '/images/luxustars.png'
     },
     {
       title: 'Luxury Chauffeur Booking Platform',
@@ -120,7 +120,7 @@ function App() {
       tech: ['Laravel', 'Frontend Development', 'Responsive Design'],
       github: '#',
       demo: 'https://empirelimousines.com/',
-      image: '/public/images/empire.png'
+      image: '/images/empire.png'
     }
   ]
 

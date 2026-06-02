@@ -88,7 +88,7 @@ function App() {
       tech: ['MODX', 'PHP', 'HTML', 'CSS', 'JavaScript', 'Responsive Design'],
       github: '#',
       demo: 'https://www.igloofoam.com/',
-      image: '/images/igloo.png'
+      image: '/images/Igloo.png'
     },
     {
       title: 'Travel Agency Website',

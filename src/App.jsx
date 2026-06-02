@@ -83,28 +83,44 @@ function App() {
 
   const projects = [
     {
-      title: 'E-Commerce Platform',
-      description: 'Full-stack e-commerce solution with payment integration',
-      tech: ['React', 'Node.js', 'MongoDB', 'Stripe'],
+      title: 'Industrial Website',
+      description: 'Modern corporate website revamp for an insulation & foam solutions company. Redesigned and revamped multiple webpages with improved UI/UX, responsive layouts, and optimized performance using MODX CMS.',
+      tech: ['MODX', 'PHP', 'HTML', 'CSS', 'JavaScript', 'Responsive Design'],
       github: '#',
-      demo: '#',
-      image: '🛒'
+      demo: 'https://www.igloofoam.com/',
+      image: '../public/images/igloo.png'
     },
     {
-      title: 'Data Visualization Dashboard',
-      description: 'Interactive dashboard for real-time data analysis',
-      tech: ['Python', 'D3.js', 'Flask', 'PostgreSQL'],
+      title: 'Travel Agency Website',
+      description: 'Professional travel agency website developed on WordPress with customized pages, tour packages, booking inquiry flows, and responsive design for a seamless travel planning experience.',
+      tech: ['WordPress', 'Elementor', 'PHP', 'MySQL', 'Responsive Design'],
       github: '#',
-      demo: '#',
+      demo: 'http://alrahla.com.pk/',
       image: '📊'
     },
     {
-      title: 'Social Media App',
-      description: 'Modern social platform with real-time messaging',
-      tech: ['React Native', 'Firebase', 'Socket.io'],
+      title: 'AI-Powered Shopify Store',
+      description: 'Developed a modern Shopify-based e-commerce store for nail products with AI-powered virtual try-on functionality, allowing users to upload hand images and preview multiple nail styles in real-time through AI integration.',
+      tech: ['Shopify', 'AI Integration', 'Liquid', 'E-Commerce'],
       github: '#',
-      demo: '#',
-      image: '📱'
+      demo: 'https://nail-ve.com/',
+      image: '../public/images/nail-ve.png'
+    },
+    {
+      title: 'Custom Booking Platform',
+      description: 'Developed a large-scale multilingual booking platform for accommodations, vehicles, boats, and tour experiences similar to Airbnb. Built on Laravel with advanced booking workflows, multilingual support, and scalable architecture.',
+      tech: ['Laravel', 'PHP', 'MySQL', 'REST API'],
+      github: '#',
+      demo: 'https://luxustars.com/',
+      image: '../public/images/luxustars.png'
+    },
+    {
+      title: 'Luxury Chauffeur Booking Platform',
+      description: 'Developed the frontend for a luxury limousine and chauffeur booking platform with a modern, responsive user experience, while collaborating with the Laravel backend team.',
+      tech: ['Laravel', 'Frontend Development', 'Responsive Design'],
+      github: '#',
+      demo: 'https://empirelimousines.com/',
+      image: '../public/images/empire.png'
     }
   ]
 
@@ -482,7 +498,11 @@ function App() {
                   <div className="project-card">
                     <div className="project-visual">
                       <div className="project-image">
-                        <span className="project-emoji">{project.image}</span>
+                        {project.image && /\.(png|jpe?g|svg|webp)$/i.test(project.image) ? (
+                          <img src={project.image} alt={project.title} className="project-image-asset" />
+                        ) : (
+                          <span className="project-emoji">{project.image}</span>
+                        )}
                       </div>
                       <div className="project-overlay">
                         <div className="project-links">

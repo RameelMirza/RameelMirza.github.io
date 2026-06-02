@@ -3,6 +3,7 @@ import './App.css'
 import Resume from './Resume.jsx'
 import ResumePage from './ResumePage.jsx'
 import { SiJavascript, SiReact, SiHtml5, SiSass, SiGit, SiBootstrap, SiTailwindcss, SiPhp, SiLaravel, SiNodedotjs, SiPython, SiPostgresql, SiWordpress, SiShopify, SiWix, SiModx, SiWebflow, SiFigma } from 'react-icons/si'
+import { SiWhatsapp } from 'react-icons/si'
 
 const SkillIcon = ({ skillName }) => {
   const iconColors = {
@@ -65,6 +66,9 @@ function App() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
   const [scrollProgress, setScrollProgress] = useState(0)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [isWhatsappOpen, setIsWhatsappOpen] = useState(false)
+  const [whatsappMessage, setWhatsappMessage] = useState('')
+  const whatsappInputRef = useRef(null)
 
   const skills = [
     { name: 'JavaScript', level: 85 },
@@ -666,6 +670,75 @@ function App() {
             </div>
           </div>
         </footer>
+
+        {/* Floating WhatsApp Widget */}
+        <div className="whatsapp-widget-container">
+          {/* Chat Box */}
+          <div className={`whatsapp-chat-box ${isWhatsappOpen ? 'open' : ''}`}>
+            <div className="chat-header">
+              <h4>Chat with us</h4>
+              <button
+                className="chat-close-btn"
+                onClick={() => setIsWhatsappOpen(false)}
+                aria-label="Close chat"
+              >
+                ✕
+              </button>
+            </div>
+            <div className="chat-body">
+              <p className="chat-greeting">Hello! 👋 How can we help you today?</p>
+            </div>
+            <div className="chat-input-area">
+              <input
+                ref={whatsappInputRef}
+                type="text"
+                placeholder="Type your message..."
+                value={whatsappMessage}
+                onChange={(e) => setWhatsappMessage(e.target.value)}
+                onKeyPress={(e) => {
+                  if (e.key === 'Enter' && whatsappMessage.trim()) {
+                    const encodedMessage = encodeURIComponent(whatsappMessage)
+                    window.open(
+                      `https://wa.me/923363062738?text=${encodedMessage}`,
+                      '_blank'
+                    )
+                    setWhatsappMessage('')
+                    setIsWhatsappOpen(false)
+                  }
+                }}
+              />
+              <button
+                className="chat-send-btn"
+                onClick={() => {
+                  if (whatsappMessage.trim()) {
+                    const encodedMessage = encodeURIComponent(whatsappMessage)
+                    window.open(
+                      `https://wa.me/923363062738?text=${encodedMessage}`,
+                      '_blank'
+                    )
+                    setWhatsappMessage('')
+                    setIsWhatsappOpen(false)
+                  }
+                }}
+                aria-label="Send message"
+              >
+                <SiWhatsapp />
+              </button>
+            </div>
+          </div>
+          {/* Floating Button */}
+          <button
+            className={`whatsapp-widget-btn ${isWhatsappOpen ? 'hide' : ''}`}
+            onClick={() => {
+              setIsWhatsappOpen(true)
+              setTimeout(() => whatsappInputRef.current?.focus(), 100)
+            }}
+            aria-label="Open WhatsApp chat"
+            title="Chat with us"
+          >
+            <SiWhatsapp className="whatsapp-icon" />
+          </button>
+        </div>
       </div>
     </>
   )

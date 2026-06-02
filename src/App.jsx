@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import './App.css'
 import Resume from './Resume.jsx'
 import ResumePage from './ResumePage.jsx'
-import { SiJavascript, SiReact, SiHtml5, SiSass, SiGit, SiBootstrap, SiTailwindcss, SiPhp, SiLaravel, SiNodedotjs, SiPython, SiPostgresql, SiWordpress, SiShopify, SiWix, SiModx, SiWebflow } from 'react-icons/si'
+import { SiJavascript, SiReact, SiHtml5, SiSass, SiGit, SiBootstrap, SiTailwindcss, SiPhp, SiLaravel, SiNodedotjs, SiPython, SiPostgresql, SiWordpress, SiShopify, SiWix, SiModx, SiWebflow, SiFigma } from 'react-icons/si'
 
 const SkillIcon = ({ skillName }) => {
   const iconColors = {
@@ -22,7 +22,8 @@ const SkillIcon = ({ skillName }) => {
     'Shopify': '#96BE28',
     'Wix': '#FFB81C',
     'MODX': '#ff5529',
-    'Webflow': '#146ef5'
+    'Webflow': '#146ef5',
+    'Figma': '#F24E1E'
   }
 
   const icons = {
@@ -44,7 +45,10 @@ const SkillIcon = ({ skillName }) => {
     'Wix': <SiWix />,
     // 'MODX': <SiPhp />
     'MODX': <SiModx />,
-    'Webflow': <SiWebflow />
+    'Webflow': <SiWebflow />,
+    'Figma': <SiFigma />
+    // 'Photoshop': <SiAdobe />,
+    // 'Adobe XD': <SiAdobexd />
   }
   
   const Icon = icons[skillName]
@@ -79,7 +83,10 @@ function App() {
     { name: 'Shopify', level: 70 },
     { name: 'Wix', level: 70 },
     { name: 'MODX', level: 50 },
-    { name: 'Webflow', level: 50 }
+    { name: 'Webflow', level: 50 },
+    { name: 'Figma', level: 50 }
+    // { name: 'Photoshop', level: 40 },
+    // { name: 'Adobe XD', level: 50 }
   ]
 
   const projects = [
@@ -232,7 +239,7 @@ function App() {
         <div className="loading">
           <div className="loading-content">
             <div className="loading-logo">
-              <span className="loading-text">RM</span>
+              <img src="/images/logo.png" alt="Rameel Mirza" className="loading-logo-image" />
               {/* <div className="loading-spinner"></div> */}
             </div>
             <div className="loading-progress">
@@ -262,6 +269,7 @@ function App() {
         <nav className={`navbar ${navbarScrolled ? 'scrolled' : ''}`}>
           <div className="nav-container">
             <div className="nav-brand" onClick={() => scrollToSection('home')}>
+              <img src="/images/logo.png" alt="Rameel Mirza" className="nav-brand-logo" />
               <span className="brand-text">Rameel</span>
               <span className="brand-accent">Mirza</span>
             </div>

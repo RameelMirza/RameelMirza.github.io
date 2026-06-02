@@ -60,6 +60,7 @@ function App() {
   const [navbarScrolled, setNavbarScrolled] = useState(false)
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
   const [scrollProgress, setScrollProgress] = useState(0)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   const skills = [
     { name: 'JavaScript', level: 85 },
@@ -288,13 +289,55 @@ function App() {
                 </li>
               ))}
             </ul>
-            <div className="nav-toggle">
+            <div
+              className={`nav-toggle ${mobileMenuOpen ? 'open' : ''}`}
+              onClick={() => setMobileMenuOpen(v => !v)}
+              role="button"
+              aria-label="Toggle menu"
+            >
               <span></span>
               <span></span>
               <span></span>
             </div>
           </div>
         </nav>
+
+        {/* Mobile full-screen menu */}
+        <div
+          className={`mobile-menu ${mobileMenuOpen ? 'open' : ''}`}
+          onClick={(e) => { if (e.target === e.currentTarget) setMobileMenuOpen(false) }}
+          role="dialog"
+          aria-hidden={!mobileMenuOpen}
+        >
+          <div className="mobile-menu-decor">
+            <div className="menu-bubble bubble-1" />
+            <div className="menu-bubble bubble-2" />
+            <div className="menu-bubble bubble-3" />
+            <div className="menu-bubble bubble-4" />
+            <div className="menu-bubble bubble-5" />
+            <div className="menu-bubble bubble-6" />
+          </div>
+          <button className="mobile-menu-close" onClick={() => setMobileMenuOpen(false)} aria-label="Close menu">×</button>
+          <ul className="mobile-menu-list">
+            {[
+              { id: 'home', label: 'Home' },
+              { id: 'about', label: 'About' },
+              { id: 'resume', label: 'Resume' },
+              { id: 'skills', label: 'Skills' },
+              { id: 'projects', label: 'Projects' },
+              { id: 'contact', label: 'Contact' }
+            ].map((item) => (
+              <li key={item.id} className="mobile-menu-item">
+                <a
+                  href={`#${item.id}`}
+                  onClick={(e) => { e.preventDefault(); setMobileMenuOpen(false); scrollToSection(item.id) }}
+                >
+                  {item.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
 
         {/* Hero Section with Parallax */}
         <section id="home" className="hero-section">

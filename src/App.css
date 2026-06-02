@@ -309,6 +309,118 @@
   transition: 0.3s;
 }
 
+/* Mobile menu toggle animation */
+.nav-toggle.open span:nth-child(1) {
+  transform: translateY(6px) rotate(45deg);
+}
+.nav-toggle.open span:nth-child(2) {
+  opacity: 0;
+}
+.nav-toggle.open span:nth-child(3) {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
+/* Fullscreen mobile menu */
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+  background: rgba(2,6,23,0.85);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.98);
+  transition: opacity 300ms ease, transform 300ms ease;
+}
+.mobile-menu.open {
+  opacity: 1;
+  pointer-events: auto;
+  transform: scale(1);
+}
+
+.mobile-menu-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: transparent;
+  border: none;
+  color: #e2e8f0;
+  font-size: 2.5rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.mobile-menu-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+}
+.mobile-menu-item {
+  margin: 18px 0;
+  transform: translateY(10px);
+  opacity: 0;
+  animation: menuItemIn 420ms forwards;
+}
+.mobile-menu.open .mobile-menu-item:nth-child(1) { animation-delay: 0.06s; }
+.mobile-menu.open .mobile-menu-item:nth-child(2) { animation-delay: 0.12s; }
+.mobile-menu.open .mobile-menu-item:nth-child(3) { animation-delay: 0.18s; }
+.mobile-menu.open .mobile-menu-item:nth-child(4) { animation-delay: 0.24s; }
+.mobile-menu.open .mobile-menu-item:nth-child(5) { animation-delay: 0.30s; }
+.mobile-menu.open .mobile-menu-item:nth-child(6) { animation-delay: 0.36s; }
+
+.mobile-menu-item a {
+  color: #e2e8f0;
+  font-size: 2rem;
+  text-decoration: none;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+@keyframes menuItemIn {
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* Decorative animated bubbles inside the mobile menu */
+.mobile-menu-decor {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+.menu-bubble {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.12;
+  filter: blur(4px);
+  transform-origin: center;
+  animation-name: bubbleFloat;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+}
+.menu-bubble.bubble-1 { width: 140px; height: 140px; background: #60a5fa; top: 10%; left: 5%; animation-duration: 10s; animation-delay: 0s; }
+.menu-bubble.bubble-2 { width: 90px; height: 90px; background: #a78bfa; bottom: 8%; right: 8%; animation-duration: 12s; animation-delay: 1.2s; }
+.menu-bubble.bubble-3 { width: 110px; height: 110px; background: #60a5fa; top: 30%; right: 20%; animation-duration: 9s; animation-delay: 0.6s; }
+.menu-bubble.bubble-4 { width: 70px; height: 70px; background: #a78bfa; top: 55%; left: 25%; animation-duration: 14s; animation-delay: 2s; }
+.menu-bubble.bubble-5 { width: 60px; height: 60px; background: #60a5fa; bottom: 28%; left: 18%; animation-duration: 11s; animation-delay: 0.8s; }
+.menu-bubble.bubble-6 { width: 100px; height: 100px; background: #a78bfa; top: 18%; left: 60%; animation-duration: 13s; animation-delay: 1.6s; }
+
+@keyframes bubbleFloat {
+  0% { transform: translateY(0) scale(1); opacity: 0.12; }
+  50% { transform: translateY(-25px) scale(1.06); opacity: 0.18; }
+  100% { transform: translateY(0) scale(1); opacity: 0.12; }
+}
+
+/* Slightly smaller menu text on phones */
+@media (max-width: 480px) {
+  .mobile-menu-item a {
+    font-size: 1.45rem;
+  }
+}
+
 /* Enhanced Hero Section */
 .hero-section {
   min-height: 100vh;

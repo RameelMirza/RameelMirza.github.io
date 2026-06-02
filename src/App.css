@@ -1205,6 +1205,8 @@
   margin-top: 10px;
 }
 
+footer .footer-brand .brand-text {margin-right: 0;}
+
 @media (max-width: 992px) {
   .resume-card {
     grid-template-columns: 1fr;
@@ -1876,12 +1878,12 @@
   }
 
   .footer-links {
-    order: 3;
+    /* order: 3; */
     justify-content: center;
   }
 
   .footer-copyright {
-    order: 2;
+    /* order: 2; */
     text-align: center;
   }
 }
@@ -1890,6 +1892,17 @@
   .about-stats .stats-grid {
     grid-template-columns: repeat(1, 1fr);
   }
+
+  .footer-brand
+  {
+    justify-content: center;
+  }
+
+  .footer-links {
+    flex-direction: column;
+    gap: 15px;
+  }
+
 }
 
 @media (max-width: 480px) {

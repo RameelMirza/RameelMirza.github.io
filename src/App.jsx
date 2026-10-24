@@ -1,3 +1,1134 @@
+// import { useState, useEffect, useRef } from 'react'
+// import './App.css'
+// import Resume from './Resume.jsx'
+// import ResumePage from './ResumePage.jsx'
+// import { SiJavascript, SiReact, SiHtml5, SiSass, SiGit, SiBootstrap, SiTailwindcss, SiPhp, SiLaravel, SiNodedotjs, SiPython, SiPostgresql, SiWordpress, SiShopify, SiWix, SiModx, SiWebflow, SiFigma } from 'react-icons/si'
+// import { SiWhatsapp } from 'react-icons/si'
+
+// /* ===== Interactive helpers: typing text, tilt cards, magnetic buttons, counters, hero photo, scroll effects, theme picker ===== */
+// /* Typing effect that cycles through a list of roles */
+// function Typewriter({ words, speed = 70, pause = 1600 }) {
+//   const [text, setText] = useState('')
+//   const [wordIndex, setWordIndex] = useState(0)
+//   const [deleting, setDeleting] = useState(false)
+
+//   useEffect(() => {
+//     const current = words[wordIndex % words.length]
+//     let delay = deleting ? speed / 2 : speed
+
+//     if (!deleting && text === current) delay = pause
+//     if (deleting && text === '') delay = 400
+
+//     const timer = setTimeout(() => {
+//       if (!deleting && text === current) {
+//         setDeleting(true)
+//       } else if (deleting && text === '') {
+//         setDeleting(false)
+//         setWordIndex((i) => (i + 1) % words.length)
+//       } else {
+//         setText(
+//           deleting
+//             ? current.slice(0, text.length - 1)
+//             : current.slice(0, text.length + 1)
+//         )
+//       }
+//     }, delay)
+
+//     return () => clearTimeout(timer)
+//   }, [text, deleting, wordIndex, words, speed, pause])
+
+//   return (
+//     <span className="typewriter">
+//       {text}
+//       <span className="typewriter-caret" />
+//     </span>
+//   )
+// }
+
+// /* 3D tilt + cursor spotlight card */
+// function TiltCard({ className = '', children, max = 10 }) {
+//   const ref = useRef(null)
+
+//   const handleMove = (e) => {
+//     const el = ref.current
+//     if (!el) return
+//     const rect = el.getBoundingClientRect()
+//     const x = e.clientX - rect.left
+//     const y = e.clientY - rect.top
+//     const rotateY = ((x / rect.width) - 0.5) * max * 2
+//     const rotateX = (0.5 - (y / rect.height)) * max * 2
+//     el.style.transition = 'transform 0.08s ease-out, box-shadow 0.3s ease, background 0.3s ease'
+//     el.style.transform = `perspective(900px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-8px) scale(1.02)`
+//     el.style.setProperty('--mx', `${x}px`)
+//     el.style.setProperty('--my', `${y}px`)
+//   }
+
+//   const handleLeave = () => {
+//     const el = ref.current
+//     if (!el) return
+//     el.style.transition = 'transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease, background 0.3s ease'
+//     el.style.transform = ''
+//   }
+
+//   return (
+//     <div
+//       ref={ref}
+//       className={`${className} tilt-card`}
+//       onMouseMove={handleMove}
+//       onMouseLeave={handleLeave}
+//     >
+//       <span className="tilt-spotlight" aria-hidden="true" />
+//       {children}
+//     </div>
+//   )
+// }
+
+// /* Button that gently follows the cursor */
+// function MagneticButton({ className = '', onClick, children }) {
+//   const ref = useRef(null)
+
+//   const handleMove = (e) => {
+//     const el = ref.current
+//     if (!el) return
+//     const rect = el.getBoundingClientRect()
+//     const x = e.clientX - rect.left - rect.width / 2
+//     const y = e.clientY - rect.top - rect.height / 2
+//     el.style.transform = `translate(${x * 0.25}px, ${y * 0.35}px)`
+//   }
+
+//   const handleLeave = () => {
+//     if (ref.current) ref.current.style.transform = ''
+//   }
+
+//   return (
+//     <button
+//       ref={ref}
+//       className={`${className} magnetic`}
+//       onClick={onClick}
+//       onMouseMove={handleMove}
+//       onMouseLeave={handleLeave}
+//     >
+//       {children}
+//     </button>
+//   )
+// }
+
+// /* Number that counts up when scrolled into view, e.g. value=50 suffix="+" */
+// function CountUp({ value, suffix = '', decimals = 0, duration = 1800 }) {
+//   const [display, setDisplay] = useState(0)
+//   const ref = useRef(null)
+//   const started = useRef(false)
+
+//   useEffect(() => {
+//     const el = ref.current
+//     if (!el) return
+
+//     const observer = new IntersectionObserver(
+//       ([entry]) => {
+//         if (entry.isIntersecting && !started.current) {
+//           started.current = true
+//           const start = performance.now()
+//           const tick = (now) => {
+//             const progress = Math.min((now - start) / duration, 1)
+//             const eased = 1 - Math.pow(1 - progress, 3)
+//             setDisplay(value * eased)
+//             if (progress < 1) requestAnimationFrame(tick)
+//           }
+//           requestAnimationFrame(tick)
+//         }
+//       },
+//       { threshold: 0.4 }
+//     )
+//     observer.observe(el)
+//     return () => observer.disconnect()
+//   }, [value, duration])
+
+//   return (
+//     <span ref={ref}>
+//       {display.toFixed(decimals)}
+//       {suffix}
+//     </span>
+//   )
+// }
+
+// /* Hero portrait with animated ring, mouse parallax and orbiting badges.
+//    Put your photo at public/images/profile.jpg (or change `src`). */
+// function HeroPhoto({ src = '/images/profile.jpg', alt = 'Rameel Mirza' }) {
+//   const [failed, setFailed] = useState(false)
+//   const wrapRef = useRef(null)
+
+//   useEffect(() => {
+//     const handle = (e) => {
+//       const el = wrapRef.current
+//       if (!el) return
+//       const x = (e.clientX / window.innerWidth - 0.5) * 2
+//       const y = (e.clientY / window.innerHeight - 0.5) * 2
+//       el.style.transform = `translate(${x * 12}px, ${y * 12}px)`
+//     }
+//     window.addEventListener('mousemove', handle)
+//     return () => window.removeEventListener('mousemove', handle)
+//   }, [])
+
+//   return (
+//     <div className="hero-photo" ref={wrapRef}>
+//       <div className="hero-photo-ring" />
+//       <div className="hero-photo-ring hero-photo-ring-2" />
+//       <div className="hero-photo-frame">
+//         {failed ? (
+//           <span className="hero-photo-fallback">👨‍💻</span>
+//         ) : (
+//           <img src={src} alt={alt} onError={() => setFailed(true)} />
+//         )}
+//       </div>
+//       <span className="orbit-badge orbit-1">React</span>
+//       <span className="orbit-badge orbit-2">Laravel</span>
+//       <span className="orbit-badge orbit-3">Tailwind</span>
+//       <span className="hero-status">
+//         <span className="hero-status-dot" /> Open to work
+//       </span>
+//     </div>
+//   )
+// }
+
+// /* Two tech strips that run in opposite directions and speed up (and lean) with scroll speed */
+// function Marquee({ items }) {
+//   const rowA = useRef(null)
+//   const rowB = useRef(null)
+//   const loop = [...items, ...items, ...items, ...items]
+
+//   useEffect(() => {
+//     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+//     let x = 0
+//     let last = window.scrollY
+//     let vel = 0
+//     let raf
+
+//     const tick = () => {
+//       const y = window.scrollY
+//       vel = vel * 0.92 + (y - last) * 0.08
+//       last = y
+//       const a = rowA.current
+//       const b = rowB.current
+//       if (a && b) {
+//         x += reduce ? 0 : 0.5 + Math.abs(vel) * 0.7
+//         const w = a.scrollWidth / 2
+//         const off = x % w
+//         const skew = reduce ? 0 : Math.max(-14, Math.min(14, -vel * 0.8))
+//         a.style.transform = `translateX(${-off}px) skewX(${skew}deg)`
+//         b.style.transform = `translateX(${off - w}px) skewX(${skew}deg)`
+//       }
+//       raf = requestAnimationFrame(tick)
+//     }
+//     raf = requestAnimationFrame(tick)
+//     return () => cancelAnimationFrame(raf)
+//   }, [])
+
+//   const row = (ref, cls) => (
+//     <div className={`marquee-track ${cls}`} ref={ref}>
+//       {loop.map((item, i) => (
+//         <span key={i} className="marquee-item">
+//           {item}
+//           <span className="marquee-dot">✦</span>
+//         </span>
+//       ))}
+//     </div>
+//   )
+
+//   return (
+//     <div className="marquee" aria-hidden="true">
+//       {row(rowA, 'marquee-a')}
+//       {row(rowB, 'marquee-b')}
+//     </div>
+//   )
+// }
+
+// /* Writes scroll position into CSS variables so the stylesheet can animate with scroll:
+//    --scroll-y (px), --scroll (0-1 page), --hero-p (0-1 through the hero), --tl (per timeline) */
+// function useScrollEffects() {
+//   useEffect(() => {
+//     const root = document.documentElement
+//     let ticking = false
+
+//     const update = () => {
+//       ticking = false
+//       const y = window.scrollY
+//       const max = Math.max(root.scrollHeight - window.innerHeight, 1)
+//       root.style.setProperty('--scroll-y', y.toFixed(1))
+//       root.style.setProperty('--scroll', (y / max).toFixed(4))
+//       root.style.setProperty('--hero-p', Math.min(y / (window.innerHeight * 0.9), 1).toFixed(4))
+//       document.querySelectorAll('.timeline').forEach((tl) => {
+//         const r = tl.getBoundingClientRect()
+//         const p = (window.innerHeight * 0.7 - r.top) / r.height
+//         tl.style.setProperty('--tl', Math.min(Math.max(p, 0), 1).toFixed(4))
+//       })
+//     }
+
+//     const onScroll = () => {
+//       if (!ticking) {
+//         ticking = true
+//         requestAnimationFrame(update)
+//       }
+//     }
+
+//     window.addEventListener('scroll', onScroll, { passive: true })
+//     window.addEventListener('resize', onScroll)
+//     update()
+//     return () => {
+//       window.removeEventListener('scroll', onScroll)
+//       window.removeEventListener('resize', onScroll)
+//     }
+//   }, [])
+// }
+
+// /* Staggered reveal for sections, cards, timeline entries and contact items */
+// function useRevealOnScroll(
+//   selector = '.section-header, .timeline-entry, .education-card, .resume-box, .contact-item, .social-card, .footer-content'
+// ) {
+//   useEffect(() => {
+//     const els = Array.from(document.querySelectorAll(selector))
+//     els.forEach((el) => {
+//       const siblings = Array.from(el.parentElement.children).filter((c) => c.matches(selector))
+//       el.style.setProperty('--d', `${Math.min(siblings.indexOf(el), 6) * 100}ms`)
+//       el.classList.add('rv')
+//     })
+//     const io = new IntersectionObserver(
+//       (entries) =>
+//         entries.forEach((e) => {
+//           if (e.isIntersecting) {
+//             e.target.classList.add('rv-in')
+//             io.unobserve(e.target)
+//           }
+//         }),
+//       { threshold: 0.15, rootMargin: '0px 0px -60px 0px' }
+//     )
+//     els.forEach((el) => io.observe(el))
+//     return () => io.disconnect()
+//   }, [selector])
+// }
+
+// const PALETTES = [
+//   { id: 'aurora', name: 'Aurora', a: '#2dd4bf', b: '#f472b6' },
+//   { id: 'sunset', name: 'Sunset', a: '#fb923c', b: '#f43f5e' },
+//   { id: 'ocean', name: 'Ocean', a: '#38bdf8', b: '#818cf8' },
+//   { id: 'lime', name: 'Lime Pulse', a: '#a3e635', b: '#22d3ee' }
+// ]
+
+// /* Floating palette switcher; remembers the choice in this browser */
+// function ThemePicker() {
+//   const [open, setOpen] = useState(false)
+//   const [palette, setPalette] = useState(() => {
+//     try {
+//       return localStorage.getItem('rm-palette') || 'aurora'
+//     } catch {
+//       return 'aurora'
+//     }
+//   })
+
+//   useEffect(() => {
+//     document.documentElement.setAttribute('data-palette', palette)
+//     try {
+//       localStorage.setItem('rm-palette', palette)
+//     } catch {
+//       /* storage unavailable */
+//     }
+//   }, [palette])
+
+//   return (
+//     <div className={`theme-picker ${open ? 'open' : ''}`}>
+//       <div className="theme-picker-options">
+//         {PALETTES.map((p) => (
+//           <button
+//             key={p.id}
+//             className={`theme-swatch ${palette === p.id ? 'active' : ''}`}
+//             style={{ background: `linear-gradient(135deg, ${p.a} 50%, ${p.b} 50%)` }}
+//             onClick={() => setPalette(p.id)}
+//             aria-label={`${p.name} colour theme`}
+//             title={p.name}
+//           />
+//         ))}
+//       </div>
+//       <button
+//         className="theme-picker-toggle"
+//         onClick={() => setOpen((v) => !v)}
+//         aria-label="Change colour theme"
+//         aria-expanded={open}
+//         title="Change colour theme"
+//       >
+//         ◐
+//       </button>
+//     </div>
+//   )
+// }
+
+// /* Floating button that appears after scrolling */
+// function BackToTop() {
+//   const [visible, setVisible] = useState(false)
+
+//   useEffect(() => {
+//     const onScroll = () => setVisible(window.scrollY > 600)
+//     window.addEventListener('scroll', onScroll)
+//     onScroll()
+//     return () => window.removeEventListener('scroll', onScroll)
+//   }, [])
+
+//   return (
+//     <button
+//       className={`back-to-top ${visible ? 'show' : ''}`}
+//       onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+//       aria-label="Back to top"
+//     >
+//       ↑
+//     </button>
+//   )
+// }
+
+// const SkillIcon = ({ skillName }) => {
+//   const iconColors = {
+//     'JavaScript': '#F7DF1E',
+//     'React': '#61DAFB',
+//     'HTML': '#E34C26',
+//     'CSS/SCSS/SASS': '#CC6699',
+//     'Git': '#F1502F',
+//     'Bootstrap': '#7952B3',
+//     'Tailwind CSS': '#06B6D4',
+//     'PHP': '#777BB4',
+//     'PHP Laravel': '#FF2D20',
+//     'Node.js': '#339933',
+//     'Python': '#3776AB',
+//     'SQL': '#336791',
+//     'WordPress': '#21759B',
+//     'Shopify': '#96BE28',
+//     'Wix': '#FFB81C',
+//     'MODX': '#ff5529',
+//     'Webflow': '#146ef5',
+//     'Figma': '#F24E1E'
+//   }
+
+//   const icons = {
+//     'JavaScript': <SiJavascript />,
+//     'React': <SiReact />,
+//     'HTML': <SiHtml5 />,
+//     'CSS/SCSS/SASS': <SiSass />,
+//     'Git': <SiGit />,
+//     'Bootstrap': <SiBootstrap />,
+//     'Tailwind CSS': <SiTailwindcss />,
+//     'PHP': <SiPhp />,
+//     'PHP Laravel': <SiLaravel />,
+//     'Node.js': <SiNodedotjs />,
+//     'Python': <SiPython />,
+//     'SQL': <SiPostgresql />,
+//     'WordPress': <SiWordpress />,
+//     'Shopify': <SiShopify />,
+//     // 'Wix': <SiWordpress />,
+//     'Wix': <SiWix />,
+//     // 'MODX': <SiPhp />
+//     'MODX': <SiModx />,
+//     'Webflow': <SiWebflow />,
+//     'Figma': <SiFigma />
+//     // 'Photoshop': <SiAdobe />,
+//     // 'Adobe XD': <SiAdobexd />
+//   }
+  
+//   const Icon = icons[skillName]
+//   const color = iconColors[skillName]
+  
+//   return Icon ? <span style={{ color }}>{Icon}</span> : null
+// }
+
+// function App() {
+//   const [activeSection, setActiveSection] = useState('home')
+//   const [activeHash, setActiveHash] = useState(window.location.hash)
+//   const [isLoading, setIsLoading] = useState(true)
+//   const [navbarScrolled, setNavbarScrolled] = useState(false)
+//   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
+//   const [scrollProgress, setScrollProgress] = useState(0)
+//   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+//   const [isWhatsappOpen, setIsWhatsappOpen] = useState(false)
+//   const [whatsappMessage, setWhatsappMessage] = useState('')
+//   const whatsappInputRef = useRef(null)
+
+//   const skills = [
+//     { name: 'JavaScript', level: 85 },
+//     { name: 'React', level: 85 },
+//     { name: 'HTML', level: 100 },
+//     { name: 'CSS/SCSS/SASS', level: 100 },
+//     { name: 'Git', level: 85 },
+//     { name: 'Bootstrap', level: 90 },
+//     { name: 'Tailwind CSS', level: 90 },
+//     { name: 'PHP', level: 80 },
+//     { name: 'PHP Laravel', level: 80 },
+//     { name: 'Node.js', level: 30 },
+//     { name: 'Python', level: 30 },
+//     { name: 'SQL', level: 60 },
+//     { name: 'WordPress', level: 80 },
+//     { name: 'Shopify', level: 70 },
+//     { name: 'Wix', level: 70 },
+//     { name: 'MODX', level: 50 },
+//     { name: 'Webflow', level: 50 },
+//     { name: 'Figma', level: 50 }
+//     // { name: 'Photoshop', level: 40 },
+//     // { name: 'Adobe XD', level: 50 }
+//   ]
+
+//   const projects = [
+//     {
+//       title: 'Industrial Website',
+//       description: 'Modern corporate website revamp for an insulation & foam solutions company. Redesigned and revamped multiple webpages with improved UI/UX, responsive layouts, and optimized performance using MODX CMS.',
+//       tech: ['MODX', 'PHP', 'HTML', 'CSS', 'JavaScript', 'Responsive Design'],
+//       github: '#',
+//       demo: 'https://www.igloofoam.com/',
+//       image: '/images/Igloo.png'
+//     },
+//     {
+//       title: 'Travel Agency Website',
+//       description: 'Professional travel agency website developed on WordPress with customized pages, tour packages, booking inquiry flows, and responsive design for a seamless travel planning experience.',
+//       tech: ['WordPress', 'Elementor', 'PHP', 'MySQL', 'Responsive Design'],
+//       github: '#',
+//       demo: 'http://alrahla.com.pk/',
+//       image: '📊'
+//     },
+//     {
+//       title: 'AI-Powered Shopify Store',
+//       description: 'Developed a modern Shopify-based e-commerce store for nail products with AI-powered virtual try-on functionality, allowing users to upload hand images and preview multiple nail styles in real-time through AI integration.',
+//       tech: ['Shopify', 'AI Integration', 'Liquid', 'E-Commerce'],
+//       github: '#',
+//       demo: 'https://nail-ve.com/',
+//       image: '/images/nail-ve.png'
+//     },
+//     {
+//       title: 'Custom Booking Platform',
+//       description: 'Developed a large-scale multilingual booking platform for accommodations, vehicles, boats, and tour experiences similar to Airbnb. Built on Laravel with advanced booking workflows, multilingual support, and scalable architecture.',
+//       tech: ['Laravel', 'PHP', 'MySQL', 'REST API'],
+//       github: '#',
+//       demo: 'https://luxustars.com/',
+//       image: '/images/luxustars.png'
+//     },
+//     {
+//       title: 'Luxury Chauffeur Booking Platform',
+//       description: 'Developed the frontend for a luxury limousine and chauffeur booking platform with a modern, responsive user experience, while collaborating with the Laravel backend team.',
+//       tech: ['Laravel', 'Frontend Development', 'Responsive Design'],
+//       github: '#',
+//       demo: 'https://empirelimousines.com/',
+//       image: '/images/empire.png'
+//     }
+//   ]
+
+//   const particlesRef = useRef(null)
+
+//   useScrollEffects()
+//   useRevealOnScroll()
+
+//   useEffect(() => {
+//     // Enhanced loading animation
+//     const timer = setTimeout(() => {
+//       setIsLoading(false)
+//     }, 3000)
+
+//     // Mouse movement tracking for interactive effects
+//     const handleMouseMove = (e) => {
+//       setMousePosition({ x: e.clientX, y: e.clientY })
+//     }
+
+//     // Scroll progress tracking
+//     const handleScroll = () => {
+//       const scrollTop = window.scrollY
+//       const docHeight = document.documentElement.scrollHeight - window.innerHeight
+//       const scrollPercent = (scrollTop / docHeight) * 100
+//       setScrollProgress(scrollPercent)
+//       setNavbarScrolled(scrollTop > 50)
+
+//       // Update active section
+//       const sections = ['home', 'about', 'resume', 'skills', 'projects', 'contact']
+//       const currentSection = sections.find(section => {
+//         const element = document.getElementById(section)
+//         if (element) {
+//           const rect = element.getBoundingClientRect()
+//           return rect.top <= 100 && rect.bottom >= 100
+//         }
+//         return false
+//       })
+//       if (currentSection) {
+//         setActiveSection(currentSection)
+//       }
+//     }
+
+//     // Create floating particles
+//     const createParticles = () => {
+//       if (!particlesRef.current) return
+
+//       for (let i = 0; i < 50; i++) {
+//         const particle = document.createElement('div')
+//         particle.className = 'particle'
+//         particle.style.left = Math.random() * 100 + '%'
+//         particle.style.animationDelay = Math.random() * 20 + 's'
+//         particle.style.animationDuration = (Math.random() * 10 + 10) + 's'
+//         particlesRef.current.appendChild(particle)
+//       }
+//     }
+
+//     // Enhanced intersection observer
+//     const observerOptions = {
+//       threshold: 0.1,
+//       rootMargin: '0px 0px -100px 0px'
+//     }
+
+//     const observer = new IntersectionObserver((entries) => {
+//       entries.forEach((entry, index) => {
+//         if (entry.isIntersecting) {
+//           setTimeout(() => {
+//             entry.target.classList.add('animate')
+//           }, index * 100)
+//         }
+//       })
+//     }, observerOptions)
+
+//     // Observe elements
+//     setTimeout(() => {
+//       const animateElements = document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right, .scale-in, .rotate-in')
+//       animateElements.forEach(el => observer.observe(el))
+//     }, 100)
+
+//     const handleHashChange = () => setActiveHash(window.location.hash)
+
+//     window.addEventListener('scroll', handleScroll)
+//     window.addEventListener('mousemove', handleMouseMove)
+//     window.addEventListener('hashchange', handleHashChange)
+//     handleScroll()
+//     createParticles()
+
+//     return () => {
+//       clearTimeout(timer)
+//       window.removeEventListener('scroll', handleScroll)
+//       window.removeEventListener('mousemove', handleMouseMove)
+//       window.removeEventListener('hashchange', handleHashChange)
+//       observer.disconnect()
+//     }
+//   }, [])
+
+//   const scrollToSection = (sectionId) => {
+//     const element = document.getElementById(sectionId)
+//     if (element) {
+//       element.scrollIntoView({ behavior: 'smooth' })
+//     }
+//   }
+
+//   if (activeHash === '#resume-page') {
+//     return <ResumePage />
+//   }
+
+//   return (
+//     <>
+//       {/* Enhanced Loading Screen */}
+//       {isLoading && (
+//         <div className="loading">
+//           <div className="loading-content">
+//             <div className="loading-logo">
+//               <img src="/images/logo.png" alt="Rameel Mirza" className="loading-logo-image" />
+//               {/* <div className="loading-spinner"></div> */}
+//             </div>
+//             <div className="loading-progress">
+//               <div className="progress-bar"></div>
+//             </div>
+//           </div>
+//         </div>
+//       )}
+
+//       <div className="portfolio">
+//         {/* Ambient colour blobs that drift as you scroll */}
+//         <div className="ambient" aria-hidden="true"><i></i><i></i><i></i></div>
+
+//         {/* Floating Particles Background */}
+//         <div className="particles-container" ref={particlesRef}></div>
+
+//         {/* Scroll Progress Bar */}
+//         <div className="scroll-progress" style={{ width: `${scrollProgress}%` }}></div>
+
+//         {/* Interactive Cursor Effect */}
+//         <div
+//           className="cursor-effect"
+//           style={{
+//             left: mousePosition.x - 10,
+//             top: mousePosition.y - 10
+//           }}
+//         ></div>
+
+//         {/* Enhanced Navigation */}
+//         <nav className={`navbar ${navbarScrolled ? 'scrolled' : ''}`}>
+//           <div className="nav-container">
+//             <div className="nav-brand" onClick={() => scrollToSection('home')}>
+//               <img src="/images/logo.png" alt="Rameel Mirza" className="nav-brand-logo" />
+//               <span className="brand-text">Rameel</span>
+//               <span className="brand-accent">Mirza</span>
+//             </div>
+//             <ul className="nav-menu">
+//               {[
+//                 { id: 'home', label: 'Home' },
+//                 { id: 'about', label: 'About' },
+//                 { id: 'resume', label: 'Resume' },
+//                 { id: 'skills', label: 'Skills' },
+//                 { id: 'projects', label: 'Projects' },
+//                 { id: 'contact', label: 'Contact' }
+//               ].map((item) => (
+//                 <li key={item.id}>
+//                   <a
+//                     href={`#${item.id}`}
+//                     className={activeSection === item.id ? 'active' : ''}
+//                     onClick={(e) => {
+//                       e.preventDefault()
+//                       scrollToSection(item.id)
+//                     }}
+//                   >
+//                     <span className="nav-dot"></span>
+//                     {item.label}
+//                   </a>
+//                 </li>
+//               ))}
+//             </ul>
+//             <div
+//               className={`nav-toggle ${mobileMenuOpen ? 'open' : ''}`}
+//               onClick={() => setMobileMenuOpen(v => !v)}
+//               role="button"
+//               aria-label="Toggle menu"
+//             >
+//               <span></span>
+//               <span></span>
+//               <span></span>
+//             </div>
+//           </div>
+//         </nav>
+
+//         {/* Mobile full-screen menu */}
+//         <div
+//           className={`mobile-menu ${mobileMenuOpen ? 'open' : ''}`}
+//           onClick={(e) => { if (e.target === e.currentTarget) setMobileMenuOpen(false) }}
+//           role="dialog"
+//           aria-hidden={!mobileMenuOpen}
+//         >
+//           <div className="mobile-menu-decor">
+//             <div className="menu-bubble bubble-1" />
+//             <div className="menu-bubble bubble-2" />
+//             <div className="menu-bubble bubble-3" />
+//             <div className="menu-bubble bubble-4" />
+//             <div className="menu-bubble bubble-5" />
+//             <div className="menu-bubble bubble-6" />
+//           </div>
+//           <button className="mobile-menu-close" onClick={() => setMobileMenuOpen(false)} aria-label="Close menu">×</button>
+//           <ul className="mobile-menu-list">
+//             {[
+//               { id: 'home', label: 'Home' },
+//               { id: 'about', label: 'About' },
+//               { id: 'resume', label: 'Resume' },
+//               { id: 'skills', label: 'Skills' },
+//               { id: 'projects', label: 'Projects' },
+//               { id: 'contact', label: 'Contact' }
+//             ].map((item) => (
+//               <li key={item.id} className="mobile-menu-item">
+//                 <a
+//                   href={`#${item.id}`}
+//                   onClick={(e) => { e.preventDefault(); setMobileMenuOpen(false); scrollToSection(item.id) }}
+//                 >
+//                   {item.label}
+//                 </a>
+//               </li>
+//             ))}
+//           </ul>
+//         </div>
+
+//         {/* Hero Section with Parallax */}
+//         <section id="home" className="hero-section">
+//           <div className="hero-background">
+//             <div className="hero-gradient"></div>
+//             <div className="hero-shapes">
+//               <div className="shape shape-1"></div>
+//               <div className="shape shape-2"></div>
+//               <div className="shape shape-3"></div>
+//             </div>
+//           </div>
+
+//           <div className="hero-content">
+//             <div className="hero-text">
+//               <div className="hero-greeting fade-in">
+//                 <span className="greeting-text">Hello, I'm</span>
+//               </div>
+//               <h1 className="hero-title">
+//                 <span className="title-main fade-in">Rameel</span>
+//                 <span className="title-accent fade-in">Mirza</span>
+//               </h1>
+//               <div className="hero-subtitle fade-in">
+//                 <span className="subtitle-text">
+//                   <Typewriter words={['Full Stack Developer', 'Laravel Expert', 'React Developer', 'UI Craftsman']} />
+//                 </span>
+//                 {/* <span className="subtitle-cursor">|</span> */}
+//               </div>
+//               <p className="hero-description fade-in">
+//                 Crafting digital experiences with modern technologies and creative solutions
+//               </p>
+//               <div className="hero-actions fade-in">
+//                 <MagneticButton className="btn btn-primary" onClick={() => scrollToSection('projects')}>
+//                   <span>View My Work</span>
+//                   <div className="btn-glow"></div>
+//                 </MagneticButton>
+//                 {/* <button className="btn btn-secondary" onClick={() => scrollToSection('resume')}>
+//                   <span>View Resume</span>
+//                 </button> */}
+//                 <MagneticButton className="btn btn-secondary" onClick={() => scrollToSection('contact')}>
+//                   <span>Get In Touch</span>
+//                 </MagneticButton>
+//               </div>
+//             </div>
+
+//             <div className="hero-visual">
+//               <div className="profile-container">
+//                 <div className="profile-glow"></div>
+//                 <HeroPhoto src="/images/profile.jpg" alt="Rameel Mirza" />
+//                 <div className="profile-stats">
+//                   <div className="stat-item">
+//                     <span className="stat-number"><CountUp value={4.5} suffix="+" decimals={1} /></span>
+//                     <span className="stat-label">Years</span>
+//                   </div>
+//                   <div className="stat-item">
+//                     <span className="stat-number"><CountUp value={50} suffix="+" /></span>
+//                     <span className="stat-label">Projects</span>
+//                   </div>
+//                   <div className="stat-item">
+//                     <span className="stat-number"><CountUp value={15} suffix="+" /></span>
+//                     <span className="stat-label">Skills</span>
+//                   </div>
+//                 </div>
+//               </div>
+//             </div>
+//           </div>
+
+//           <div className="hero-scroll">
+//             <div className="scroll-indicator">
+//               <span>Scroll Down</span>
+//               <div className="scroll-mouse">
+//                 <div className="scroll-wheel"></div>
+//               </div>
+//             </div>
+//           </div>
+//         </section>
+
+//         <Marquee items={['Laravel', 'React', 'Next.js', 'Tailwind', 'PHP', 'JavaScript', 'REST APIs', 'WordPress', 'Shopify', 'MySQL']} />
+
+//         {/* About Section */}
+//         <section id="about" className="about-section">
+//           <div className="section-background">
+//             <div className="bg-shape bg-shape-1"></div>
+//             <div className="bg-shape bg-shape-2"></div>
+//           </div>
+
+//           <div className="container">
+//             <div className="section-header">
+//               <h2 className="section-title">
+//                 <span className="title-accent">About</span> Me
+//               </h2>
+//               <div className="title-underline"></div>
+//             </div>
+
+//             <div className="about-content">
+//               <div className="about-text">
+//                 <div className="text-block fade-in">
+//                   <p>
+//                     I'm a passionate full-stack developer who loves creating innovative solutions
+//                     and bringing ideas to life through code. With expertise in modern web technologies,
+//                     I craft digital experiences that are both functional and beautiful.
+//                   </p>
+//                 </div>
+//                 <div className="text-block fade-in">
+//                   <p>
+//                     My journey in software development has equipped me with a diverse skill set
+//                     and a problem-solving mindset. I enjoy working on challenging projects that
+//                     push the boundaries of what's possible.
+//                   </p>
+//                 </div>
+//               </div>
+
+//               <div className="about-stats">
+//                 <div className="stats-grid">
+//                   <div className="stat-card scale-in">
+//                     <div className="stat-icon">🚀</div>
+//                     <div className="stat-content">
+//                       <h3><CountUp value={4.5} decimals={1} suffix="+" /></h3>
+//                       <p>Years Experience</p>
+//                     </div>
+//                   </div>
+//                   <div className="stat-card scale-in">
+//                     <div className="stat-icon">💼</div>
+//                     <div className="stat-content">
+//                       <h3><CountUp value={50} suffix="+" /></h3>
+//                       <p>Projects Completed</p>
+//                     </div>
+//                   </div>
+//                   <div className="stat-card scale-in">
+//                     <div className="stat-icon">🎯</div>
+//                     <div className="stat-content">
+//                       <h3><CountUp value={15} suffix="+" /></h3>
+//                       <p>Technologies Mastered</p>
+//                     </div>
+//                   </div>
+//                 </div>
+//               </div>
+//             </div>
+//           </div>
+//         </section>
+
+//         <Resume />
+
+//         {/* Skills Section */}
+//         <section id="skills" className="skills-section">
+//           <div className="container">
+//             <div className="section-header">
+//               <h2 className="section-title">
+//                 <span className="title-accent">Skills</span> & Technologies
+//               </h2>
+//               <div className="title-underline"></div>
+//             </div>
+
+//             <div className="skills-showcase">
+//               {skills.map((skill, index) => (
+//                 <div
+//                   key={index}
+//                   className="skill-item scale-in"
+//                   style={{ animationDelay: `${index * 0.1}s` }}
+//                 >
+//                   <TiltCard className="skill-card" max={8}>
+//                     <div className="skill-header">
+//                       <span className="skill-icon"><SkillIcon skillName={skill.name} /></span>
+//                       <span className="skill-name">{skill.name}</span>
+//                     </div>
+//                     <div className="skill-progress">
+//                       <div
+//                         className="progress-bar"
+//                         style={{ '--level': `${skill.level}%` }}
+//                       ></div>
+//                     </div>
+//                     <span className="skill-level">{skill.level}%</span>
+//                   </TiltCard>
+//                 </div>
+//               ))}
+//             </div>
+//           </div>
+//         </section>
+
+//         {/* Projects Section */}
+//         <section id="projects" className="projects-section">
+//           <div className="container">
+//             <div className="section-header">
+//               <h2 className="section-title">
+//                 <span className="title-accent">My</span> Projects
+//               </h2>
+//               <div className="title-underline"></div>
+//             </div>
+
+//             <div className="projects-showcase">
+//               {projects.map((project, index) => (
+//                 <div
+//                   key={index}
+//                   className="project-item scale-in"
+//                   style={{ animationDelay: `${index * 0.2}s` }}
+//                 >
+//                   <TiltCard className="project-card" max={6}>
+//                     <div className="project-visual">
+//                       <div className="project-image">
+//                         {project.image && /\.(png|jpe?g|svg|webp)$/i.test(project.image) ? (
+//                           <img src={project.image} alt={project.title} className="project-image-asset" />
+//                         ) : (
+//                           <span className="project-emoji">{project.image}</span>
+//                         )}
+//                       </div>
+//                       <div className="project-overlay">
+//                         <div className="project-links">
+//                           <a href={project.github} className="project-link">
+//                             <span>GitHub</span>
+//                           </a>
+//                           <a href={project.demo} className="project-link primary">
+//                             <span>Live Demo</span>
+//                           </a>
+//                         </div>
+//                       </div>
+//                     </div>
+//                     <div className="project-content">
+//                       <h3 className="project-title">{project.title}</h3>
+//                       <p className="project-description">{project.description}</p>
+//                       <div className="project-tech">
+//                         {project.tech.map((tech, techIndex) => (
+//                           <span key={techIndex} className="tech-badge">{tech}</span>
+//                         ))}
+//                       </div>
+//                     </div>
+//                   </TiltCard>
+//                 </div>
+//               ))}
+//             </div>
+//           </div>
+//         </section>
+
+//         {/* Contact Section */}
+//         <section id="contact" className="contact-section">
+//           <div className="container">
+//             <div className="section-header">
+//               <h2 className="section-title">
+//                 <span className="title-accent">Get In</span> Touch
+//               </h2>
+//               <div className="title-underline"></div>
+//             </div>
+
+//             <div className="contact-content">
+//               <div className="contact-info slide-in-left">
+//                 <div className="contact-message">
+//                   <h3>Let's Work Together</h3>
+//                   <p>
+//                     I'm always excited to take on new challenges and collaborate on interesting projects.
+//                     Whether you have a project in mind or just want to connect, feel free to reach out!
+//                   </p>
+//                 </div>
+//                 <div className="contact-details">
+//                   <div className="contact-item">
+//                     <div className="contact-icon">📧</div>
+//                     <div className="contact-text">
+//                       <span className="contact-label">Email: </span>
+//                       <span className="contact-value">rameelmirza5@gmail.com</span>
+//                     </div>
+//                   </div>
+//                   <div className="contact-item">
+//                     <div className="contact-icon">📍</div>
+//                     <div className="contact-text">
+//                       <span className="contact-label">Location: </span>
+//                       <span className="contact-value">Karachi, Pakistan</span>
+//                     </div>
+//                   </div>
+//                 </div>
+//               </div>
+
+//               <div className="social-links slide-in-right">
+//                 <h3>Connect With Me</h3>
+//                 <div className="social-grid">
+//                   {[
+//                     { name: 'GitHub', icon: '🐙', url: 'https://github.com/rameelmirza' },
+//                     { name: 'LinkedIn', icon: '💼', url: 'https://www.linkedin.com/in/rameelmirza' },
+//                     { name: 'Twitter', icon: '🐦', url: 'https://x.com/RameelMirza1' },
+//                     { name: 'Instagram', icon: '📸', url: 'https://www.instagram.com/rameel_mirza' }
+//                   ].map((social, index) => (
+//                     <a
+//                       key={index}
+//                       href={social.url}
+//                       className="social-card"
+//                       style={{ animationDelay: `${index * 0.1}s` }}
+//                     >
+//                       <span className="social-icon">{social.icon}</span>
+//                       <span className="social-name">{social.name}</span>
+//                     </a>
+//                   ))}
+//                 </div>
+//               </div>
+//             </div>
+//           </div>
+//         </section>
+
+//         {/* Footer */}
+//         <footer className="footer">
+//           <div className="container">
+//             <div className="footer-content">
+//               <div className="footer-brand">
+//                 <span className="brand-text">Rameel</span>
+//                 <span className="brand-accent">Mirza</span>
+//               </div>
+//               <div className="footer-links">
+//                 <a href="#home" onClick={(e) => { e.preventDefault(); scrollToSection('home'); }}>Home</a>
+//                 <a href="#about" onClick={(e) => { e.preventDefault(); scrollToSection('about'); }}>About</a>
+//                 <a href="#resume" onClick={(e) => { e.preventDefault(); scrollToSection('resume'); }}>Resume</a>
+//                 <a href="#skills" onClick={(e) => { e.preventDefault(); scrollToSection('skills'); }}>Skills</a>
+//                 <a href="#projects" onClick={(e) => { e.preventDefault(); scrollToSection('projects'); }}>Projects</a>
+//                 <a href="#contact" onClick={(e) => { e.preventDefault(); scrollToSection('contact'); }}>Contact</a>
+//               </div>
+//               <div className="footer-copyright">
+//                 <p>&copy; 2026 Rameel Mirza. All rights reserved.</p>
+//               </div>
+//             </div>
+//           </div>
+//         </footer>
+
+//         <ThemePicker />
+//         <BackToTop />
+
+//         {/* Floating WhatsApp Widget */}
+//         <div className="whatsapp-widget-container">
+//           {/* Chat Box */}
+//           <div className={`whatsapp-chat-box ${isWhatsappOpen ? 'open' : ''}`}>
+//             <div className="chat-header">
+//               <h4>Chat with us</h4>
+//               <button
+//                 className="chat-close-btn"
+//                 onClick={() => setIsWhatsappOpen(false)}
+//                 aria-label="Close chat"
+//               >
+//                 ✕
+//               </button>
+//             </div>
+//             <div className="chat-body">
+//               <p className="chat-greeting">Hello! 👋 How can we help you today?</p>
+//             </div>
+//             <div className="chat-input-area">
+//               <input
+//                 ref={whatsappInputRef}
+//                 type="text"
+//                 placeholder="Type your message..."
+//                 value={whatsappMessage}
+//                 onChange={(e) => setWhatsappMessage(e.target.value)}
+//                 onKeyPress={(e) => {
+//                   if (e.key === 'Enter' && whatsappMessage.trim()) {
+//                     const encodedMessage = encodeURIComponent(whatsappMessage)
+//                     window.open(
+//                       `https://wa.me/923363062738?text=${encodedMessage}`,
+//                       '_blank'
+//                     )
+//                     setWhatsappMessage('')
+//                     setIsWhatsappOpen(false)
+//                   }
+//                 }}
+//               />
+//               <button
+//                 className="chat-send-btn"
+//                 onClick={() => {
+//                   if (whatsappMessage.trim()) {
+//                     const encodedMessage = encodeURIComponent(whatsappMessage)
+//                     window.open(
+//                       `https://wa.me/923363062738?text=${encodedMessage}`,
+//                       '_blank'
+//                     )
+//                     setWhatsappMessage('')
+//                     setIsWhatsappOpen(false)
+//                   }
+//                 }}
+//                 aria-label="Send message"
+//               >
+//                 <SiWhatsapp />
+//               </button>
+//             </div>
+//           </div>
+//           {/* Floating Button */}
+//           <button
+//             className={`whatsapp-widget-btn ${isWhatsappOpen ? 'hide' : ''}`}
+//             onClick={() => {
+//               setIsWhatsappOpen(true)
+//               setTimeout(() => whatsappInputRef.current?.focus(), 100)
+//             }}
+//             aria-label="Open WhatsApp chat"
+//             title="Chat with us"
+//           >
+//             <SiWhatsapp className="whatsapp-icon" />
+//           </button>
+//         </div>
+//       </div>
+//     </>
+//   )
+// }
+
+// export default App
+
+
+
 import { useState, useEffect, useRef } from 'react'
 import './App.css'
 import Resume from './Resume.jsx'
@@ -48,32 +1179,48 @@ function Typewriter({ words, speed = 70, pause = 1600 }) {
 /* 3D tilt + cursor spotlight card */
 function TiltCard({ className = '', children, max = 10 }) {
   const ref = useRef(null)
+  const frame = useRef(0)
+  const timer = useRef(0)
+  const coarse = typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches
+
+  const handleEnter = () => {
+    clearTimeout(timer.current)
+    if (ref.current) ref.current.style.willChange = 'transform'
+  }
 
   const handleMove = (e) => {
-    const el = ref.current
-    if (!el) return
-    const rect = el.getBoundingClientRect()
-    const x = e.clientX - rect.left
-    const y = e.clientY - rect.top
-    const rotateY = ((x / rect.width) - 0.5) * max * 2
-    const rotateX = (0.5 - (y / rect.height)) * max * 2
-    el.style.transition = 'transform 0.08s ease-out, box-shadow 0.3s ease, background 0.3s ease'
-    el.style.transform = `perspective(900px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-8px) scale(1.02)`
-    el.style.setProperty('--mx', `${x}px`)
-    el.style.setProperty('--my', `${y}px`)
+    if (coarse) return
+    const { clientX, clientY } = e
+    cancelAnimationFrame(frame.current)
+    frame.current = requestAnimationFrame(() => {
+      const el = ref.current
+      if (!el) return
+      const rect = el.getBoundingClientRect()
+      const x = clientX - rect.left
+      const y = clientY - rect.top
+      const rotateY = ((x / rect.width) - 0.5) * max * 2
+      const rotateX = (0.5 - (y / rect.height)) * max * 2
+      el.style.transition = 'transform 0.1s ease-out, box-shadow 0.3s ease, background 0.3s ease'
+      el.style.transform = `perspective(900px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-8px) scale(1.02)`
+      el.style.setProperty('--mx', `${x}px`)
+      el.style.setProperty('--my', `${y}px`)
+    })
   }
 
   const handleLeave = () => {
+    cancelAnimationFrame(frame.current)
     const el = ref.current
     if (!el) return
     el.style.transition = 'transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease, background 0.3s ease'
     el.style.transform = ''
+    timer.current = setTimeout(() => { if (ref.current) ref.current.style.willChange = '' }, 600)
   }
 
   return (
     <div
       ref={ref}
       className={`${className} tilt-card`}
+      onMouseEnter={handleEnter}
       onMouseMove={handleMove}
       onMouseLeave={handleLeave}
     >
@@ -192,18 +1339,35 @@ function HeroPhoto({ src = '/images/profile.jpg', alt = 'Rameel Mirza' }) {
 
 /* Two tech strips that run in opposite directions and speed up (and lean) with scroll speed */
 function Marquee({ items }) {
+  const wrap = useRef(null)
   const rowA = useRef(null)
   const rowB = useRef(null)
-  const loop = [...items, ...items, ...items, ...items]
+  const loop = [...items, ...items, ...items]
 
   useEffect(() => {
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     let x = 0
     let last = window.scrollY
     let vel = 0
-    let raf
+    let raf = 0
+    let visible = true
+    let w = 1
 
-    const tick = () => {
+    const measure = () => {
+      if (rowA.current) w = rowA.current.scrollWidth / 3 || 1
+    }
+    measure()
+    window.addEventListener('resize', measure)
+
+    const io = new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting
+      if (visible && !raf) raf = requestAnimationFrame(tick)
+    })
+    if (wrap.current) io.observe(wrap.current)
+
+    function tick() {
+      raf = 0
+      if (!visible) return
       const y = window.scrollY
       vel = vel * 0.92 + (y - last) * 0.08
       last = y
@@ -211,16 +1375,20 @@ function Marquee({ items }) {
       const b = rowB.current
       if (a && b) {
         x += reduce ? 0 : 0.5 + Math.abs(vel) * 0.7
-        const w = a.scrollWidth / 2
         const off = x % w
         const skew = reduce ? 0 : Math.max(-14, Math.min(14, -vel * 0.8))
-        a.style.transform = `translateX(${-off}px) skewX(${skew}deg)`
-        b.style.transform = `translateX(${off - w}px) skewX(${skew}deg)`
+        a.style.transform = `translate3d(${-off}px, 0, 0) skewX(${skew}deg)`
+        b.style.transform = `translate3d(${off - w}px, 0, 0) skewX(${skew}deg)`
       }
       raf = requestAnimationFrame(tick)
     }
     raf = requestAnimationFrame(tick)
-    return () => cancelAnimationFrame(raf)
+
+    return () => {
+      cancelAnimationFrame(raf)
+      io.disconnect()
+      window.removeEventListener('resize', measure)
+    }
   }, [])
 
   const row = (ref, cls) => (
@@ -235,7 +1403,7 @@ function Marquee({ items }) {
   )
 
   return (
-    <div className="marquee" aria-hidden="true">
+    <div className="marquee" ref={wrap} aria-hidden="true">
       {row(rowA, 'marquee-a')}
       {row(rowB, 'marquee-b')}
     </div>
@@ -247,19 +1415,38 @@ function Marquee({ items }) {
 function useScrollEffects() {
   useEffect(() => {
     const root = document.documentElement
+    const ambient = document.querySelector('.ambient')
+    const hero = document.querySelector('.hero-section')
+    const about = document.querySelector('.about-section')
+    const timelines = Array.from(document.querySelectorAll('.timeline'))
     let ticking = false
+    let lastHero = -1
 
     const update = () => {
       ticking = false
       const y = window.scrollY
-      const max = Math.max(root.scrollHeight - window.innerHeight, 1)
-      root.style.setProperty('--scroll-y', y.toFixed(1))
-      root.style.setProperty('--scroll', (y / max).toFixed(4))
-      root.style.setProperty('--hero-p', Math.min(y / (window.innerHeight * 0.9), 1).toFixed(4))
-      document.querySelectorAll('.timeline').forEach((tl) => {
-        const r = tl.getBoundingClientRect()
-        const p = (window.innerHeight * 0.7 - r.top) / r.height
-        tl.style.setProperty('--tl', Math.min(Math.max(p, 0), 1).toFixed(4))
+      const vh = window.innerHeight
+      const max = Math.max(root.scrollHeight - vh, 1)
+
+      // read layout first, then write
+      const rects = timelines.map((tl) => tl.getBoundingClientRect())
+
+      if (ambient) ambient.style.setProperty('--scroll', (y / max).toFixed(3))
+
+      const heroP = Math.round(Math.min(y / (vh * 0.9), 1) * 1000) / 1000
+      if (hero && heroP !== lastHero) {
+        lastHero = heroP
+        hero.style.setProperty('--hero-p', heroP)
+        hero.style.setProperty('--scroll-y', y.toFixed(0))
+      }
+      if (about && y < about.offsetTop + about.offsetHeight + vh) {
+        about.style.setProperty('--scroll-y', y.toFixed(0))
+      }
+
+      timelines.forEach((tl, i) => {
+        const r = rects[i]
+        const p = (vh * 0.7 - r.top) / r.height
+        tl.style.setProperty('--tl', Math.min(Math.max(p, 0), 1).toFixed(3))
       })
     }
 
@@ -440,8 +1627,6 @@ function App() {
   const [activeHash, setActiveHash] = useState(window.location.hash)
   const [isLoading, setIsLoading] = useState(true)
   const [navbarScrolled, setNavbarScrolled] = useState(false)
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
-  const [scrollProgress, setScrollProgress] = useState(0)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [isWhatsappOpen, setIsWhatsappOpen] = useState(false)
   const [whatsappMessage, setWhatsappMessage] = useState('')
@@ -514,6 +1699,10 @@ function App() {
   ]
 
   const particlesRef = useRef(null)
+  const cursorRef = useRef(null)
+  const progressRef = useRef(null)
+  const activeRef = useRef('home')
+  const scrolledRef = useRef(false)
 
   useScrollEffects()
   useRevealOnScroll()
@@ -526,37 +1715,59 @@ function App() {
 
     // Mouse movement tracking for interactive effects
     const handleMouseMove = (e) => {
-      setMousePosition({ x: e.clientX, y: e.clientY })
+      if (cursorRef.current) {
+        cursorRef.current.style.transform = `translate3d(${e.clientX - 30}px, ${e.clientY - 30}px, 0)`
+      }
     }
 
-    // Scroll progress tracking
+    // Scroll tracking: writes straight to the DOM and only updates React state when a value really changes
+    const sectionIds = ['home', 'about', 'resume', 'skills', 'projects', 'contact']
+    let scrollTicking = false
+
     const handleScroll = () => {
       const scrollTop = window.scrollY
       const docHeight = document.documentElement.scrollHeight - window.innerHeight
-      const scrollPercent = (scrollTop / docHeight) * 100
-      setScrollProgress(scrollPercent)
-      setNavbarScrolled(scrollTop > 50)
+      if (progressRef.current) {
+        progressRef.current.style.transform = `scaleX(${docHeight > 0 ? scrollTop / docHeight : 0})`
+      }
 
-      // Update active section
-      const sections = ['home', 'about', 'resume', 'skills', 'projects', 'contact']
-      const currentSection = sections.find(section => {
-        const element = document.getElementById(section)
+      const scrolled = scrollTop > 50
+      if (scrolled !== scrolledRef.current) {
+        scrolledRef.current = scrolled
+        setNavbarScrolled(scrolled)
+      }
+
+      let current = null
+      for (const id of sectionIds) {
+        const element = document.getElementById(id)
         if (element) {
           const rect = element.getBoundingClientRect()
-          return rect.top <= 100 && rect.bottom >= 100
+          if (rect.top <= 100 && rect.bottom >= 100) {
+            current = id
+            break
+          }
         }
-        return false
-      })
-      if (currentSection) {
-        setActiveSection(currentSection)
       }
+      if (current && current !== activeRef.current) {
+        activeRef.current = current
+        setActiveSection(current)
+      }
+    }
+
+    const onScroll = () => {
+      if (scrollTicking) return
+      scrollTicking = true
+      requestAnimationFrame(() => {
+        scrollTicking = false
+        handleScroll()
+      })
     }
 
     // Create floating particles
     const createParticles = () => {
       if (!particlesRef.current) return
 
-      for (let i = 0; i < 50; i++) {
+      for (let i = 0; i < 24; i++) {
         const particle = document.createElement('div')
         particle.className = 'particle'
         particle.style.left = Math.random() * 100 + '%'
@@ -590,15 +1801,15 @@ function App() {
 
     const handleHashChange = () => setActiveHash(window.location.hash)
 
-    window.addEventListener('scroll', handleScroll)
-    window.addEventListener('mousemove', handleMouseMove)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('mousemove', handleMouseMove, { passive: true })
     window.addEventListener('hashchange', handleHashChange)
     handleScroll()
     createParticles()
 
     return () => {
       clearTimeout(timer)
-      window.removeEventListener('scroll', handleScroll)
+      window.removeEventListener('scroll', onScroll)
       window.removeEventListener('mousemove', handleMouseMove)
       window.removeEventListener('hashchange', handleHashChange)
       observer.disconnect()
@@ -641,16 +1852,10 @@ function App() {
         <div className="particles-container" ref={particlesRef}></div>
 
         {/* Scroll Progress Bar */}
-        <div className="scroll-progress" style={{ width: `${scrollProgress}%` }}></div>
+        <div className="scroll-progress" ref={progressRef}></div>
 
         {/* Interactive Cursor Effect */}
-        <div
-          className="cursor-effect"
-          style={{
-            left: mousePosition.x - 10,
-            top: mousePosition.y - 10
-          }}
-        ></div>
+        <div className="cursor-effect" ref={cursorRef}></div>
 
         {/* Enhanced Navigation */}
         <nav className={`navbar ${navbarScrolled ? 'scrolled' : ''}`}>

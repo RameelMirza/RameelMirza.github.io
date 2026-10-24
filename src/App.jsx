@@ -174,11 +174,11 @@ function HeroPhoto({ src = '/images/rameelmirza.jpg', alt = 'Rameel Mirza' }) {
       <div className="hero-photo-ring" />
       <div className="hero-photo-ring hero-photo-ring-2" />
       <div className="hero-photo-frame">
-        {failed ? (
+        {/* {failed ? (
           <span className="hero-photo-fallback">👨‍💻</span>
-        ) : (
+        ) : ( */}
           <img src={src} alt={alt} onError={() => setFailed(true)} />
-        )}
+        {/* )} */}
       </div>
       <span className="orbit-badge orbit-1">React</span>
       <span className="orbit-badge orbit-2">Laravel</span>

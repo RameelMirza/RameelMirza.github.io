@@ -791,7 +791,7 @@ function App() {
                 <HeroPhoto src="/images/rameelmirza.jpg" alt="Rameel Mirza" />
                 <div className="profile-stats">
                   <div className="stat-item">
-                    <span className="stat-number"><CountUp value={4.5} suffix="+" decimals={1} /></span>
+                    <span className="stat-number"><CountUp value={5} suffix="+" decimals={0} /></span>
                     <span className="stat-label">Years</span>
                   </div>
                   <div className="stat-item">
@@ -857,7 +857,7 @@ function App() {
                   <div className="stat-card scale-in">
                     <div className="stat-icon">🚀</div>
                     <div className="stat-content">
-                      <h3><CountUp value={4.5} decimals={1} suffix="+" /></h3>
+                      <h3><CountUp value={5} decimals={0} suffix="+" /></h3>
                       <p>Years Experience</p>
                     </div>
                   </div>

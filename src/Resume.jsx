@@ -1,6 +1,6 @@
 function Resume({ showOpenButton = true }) {
   const resumeHighlights = [
-    'Full Stack Web Developer with 4.5+ years of experience building scalable web applications using Laravel, React, and modern front-end technologies.',
+    'Full Stack Web Developer with 5+ years of experience building scalable web applications using Laravel, React, and modern front-end technologies.',
     'Skilled in designing responsive UI, creating RESTful APIs, and delivering polished digital experiences with a strong focus on usability.',
     'Committed to clear communication, efficient problem solving, and building solutions that help teams move quickly and with confidence.'
   ]
@@ -126,7 +126,7 @@ function Resume({ showOpenButton = true }) {
             <section className="resume-block">
               <h3>Profile</h3>
               <p>
-                Experienced Full Stack Web Developer with 4.5+ years of experience in Laravel, React,
+                Experienced Full Stack Web Developer with 5+ years of experience in Laravel, React,
                 and responsive web development. I build fast, scalable applications with strong focus
                 on usability, architecture, and maintainability.
               </p>

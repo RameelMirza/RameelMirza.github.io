@@ -1057,7 +1057,7 @@ function App() {
           </div>
         </footer>
 
-        <ThemePicker />
+        {/* <ThemePicker /> */}
         <BackToTop />
 
         {/* Floating WhatsApp Widget */}

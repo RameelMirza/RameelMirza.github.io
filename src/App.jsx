@@ -153,7 +153,7 @@ function CountUp({ value, suffix = '', decimals = 0, duration = 1800 }) {
 
 /* Hero portrait with animated ring, mouse parallax and orbiting badges.
    Put your photo at public/images/profile.jpg (or change `src`). */
-function HeroPhoto({ src = '/images/profile.jpg', alt = 'Rameel Mirza' }) {
+function HeroPhoto({ src = '/images/rameelmirza.jpg', alt = 'Rameel Mirza' }) {
   const [failed, setFailed] = useState(false)
   const wrapRef = useRef(null)
 
@@ -510,6 +510,14 @@ function App() {
       github: '#',
       demo: 'https://empirelimousines.com/',
       image: '/images/empire.png'
+    },
+    {
+      title: 'Tera Wallet Payment API',
+      description: 'Developed fully customized WordPress REST APIs for a React Native application, enabling Tera Wallet payments through QR code integration and secure communication between the mobile app and WordPress backend.',
+      tech: ['WordPress', 'PHP', 'Custom REST APIs', 'React Native', 'QR Code Payments'],
+      github: '#',
+      demo: 'https://pureprepbangkok.com/',
+      image: '/images/pureprep.png'
     }
   ]
 

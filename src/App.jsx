@@ -5,383 +5,6 @@ import ResumePage from './ResumePage.jsx'
 import { SiJavascript, SiReact, SiHtml5, SiSass, SiGit, SiBootstrap, SiTailwindcss, SiPhp, SiLaravel, SiNodedotjs, SiPython, SiPostgresql, SiWordpress, SiShopify, SiWix, SiModx, SiWebflow, SiFigma } from 'react-icons/si'
 import { SiWhatsapp } from 'react-icons/si'
 
-/* ===== Interactive helpers: typing text, tilt cards, magnetic buttons, counters, hero photo, scroll effects, theme picker ===== */
-/* Typing effect that cycles through a list of roles */
-function Typewriter({ words, speed = 70, pause = 1600 }) {
-  const [text, setText] = useState('')
-  const [wordIndex, setWordIndex] = useState(0)
-  const [deleting, setDeleting] = useState(false)
-
-  useEffect(() => {
-    const current = words[wordIndex % words.length]
-    let delay = deleting ? speed / 2 : speed
-
-    if (!deleting && text === current) delay = pause
-    if (deleting && text === '') delay = 400
-
-    const timer = setTimeout(() => {
-      if (!deleting && text === current) {
-        setDeleting(true)
-      } else if (deleting && text === '') {
-        setDeleting(false)
-        setWordIndex((i) => (i + 1) % words.length)
-      } else {
-        setText(
-          deleting
-            ? current.slice(0, text.length - 1)
-            : current.slice(0, text.length + 1)
-        )
-      }
-    }, delay)
-
-    return () => clearTimeout(timer)
-  }, [text, deleting, wordIndex, words, speed, pause])
-
-  return (
-    <span className="typewriter">
-      {text}
-      <span className="typewriter-caret" />
-    </span>
-  )
-}
-
-/* 3D tilt + cursor spotlight card */
-function TiltCard({ className = '', children, max = 10 }) {
-  const ref = useRef(null)
-
-  const handleMove = (e) => {
-    const el = ref.current
-    if (!el) return
-    const rect = el.getBoundingClientRect()
-    const x = e.clientX - rect.left
-    const y = e.clientY - rect.top
-    const rotateY = ((x / rect.width) - 0.5) * max * 2
-    const rotateX = (0.5 - (y / rect.height)) * max * 2
-    el.style.transition = 'transform 0.08s ease-out, box-shadow 0.3s ease, background 0.3s ease'
-    el.style.transform = `perspective(900px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-8px) scale(1.02)`
-    el.style.setProperty('--mx', `${x}px`)
-    el.style.setProperty('--my', `${y}px`)
-  }
-
-  const handleLeave = () => {
-    const el = ref.current
-    if (!el) return
-    el.style.transition = 'transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease, background 0.3s ease'
-    el.style.transform = ''
-  }
-
-  return (
-    <div
-      ref={ref}
-      className={`${className} tilt-card`}
-      onMouseMove={handleMove}
-      onMouseLeave={handleLeave}
-    >
-      <span className="tilt-spotlight" aria-hidden="true" />
-      {children}
-    </div>
-  )
-}
-
-/* Button that gently follows the cursor */
-function MagneticButton({ className = '', onClick, children }) {
-  const ref = useRef(null)
-
-  const handleMove = (e) => {
-    const el = ref.current
-    if (!el) return
-    const rect = el.getBoundingClientRect()
-    const x = e.clientX - rect.left - rect.width / 2
-    const y = e.clientY - rect.top - rect.height / 2
-    el.style.transform = `translate(${x * 0.25}px, ${y * 0.35}px)`
-  }
-
-  const handleLeave = () => {
-    if (ref.current) ref.current.style.transform = ''
-  }
-
-  return (
-    <button
-      ref={ref}
-      className={`${className} magnetic`}
-      onClick={onClick}
-      onMouseMove={handleMove}
-      onMouseLeave={handleLeave}
-    >
-      {children}
-    </button>
-  )
-}
-
-/* Number that counts up when scrolled into view, e.g. value=50 suffix="+" */
-function CountUp({ value, suffix = '', decimals = 0, duration = 1800 }) {
-  const [display, setDisplay] = useState(0)
-  const ref = useRef(null)
-  const started = useRef(false)
-
-  useEffect(() => {
-    const el = ref.current
-    if (!el) return
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !started.current) {
-          started.current = true
-          const start = performance.now()
-          const tick = (now) => {
-            const progress = Math.min((now - start) / duration, 1)
-            const eased = 1 - Math.pow(1 - progress, 3)
-            setDisplay(value * eased)
-            if (progress < 1) requestAnimationFrame(tick)
-          }
-          requestAnimationFrame(tick)
-        }
-      },
-      { threshold: 0.4 }
-    )
-    observer.observe(el)
-    return () => observer.disconnect()
-  }, [value, duration])
-
-  return (
-    <span ref={ref}>
-      {display.toFixed(decimals)}
-      {suffix}
-    </span>
-  )
-}
-
-/* Hero portrait with animated ring, mouse parallax and orbiting badges.
-   Put your photo at public/images/profile.jpg (or change `src`). */
-function HeroPhoto({ src = '/images/profile.jpg', alt = 'Rameel Mirza' }) {
-  const [failed, setFailed] = useState(false)
-  const wrapRef = useRef(null)
-
-  useEffect(() => {
-    const handle = (e) => {
-      const el = wrapRef.current
-      if (!el) return
-      const x = (e.clientX / window.innerWidth - 0.5) * 2
-      const y = (e.clientY / window.innerHeight - 0.5) * 2
-      el.style.transform = `translate(${x * 12}px, ${y * 12}px)`
-    }
-    window.addEventListener('mousemove', handle)
-    return () => window.removeEventListener('mousemove', handle)
-  }, [])
-
-  return (
-    <div className="hero-photo" ref={wrapRef}>
-      <div className="hero-photo-ring" />
-      <div className="hero-photo-ring hero-photo-ring-2" />
-      <div className="hero-photo-frame">
-        {failed ? (
-          <span className="hero-photo-fallback">👨‍💻</span>
-        ) : (
-          <img src={src} alt={alt} onError={() => setFailed(true)} />
-        )}
-      </div>
-      <span className="orbit-badge orbit-1">React</span>
-      <span className="orbit-badge orbit-2">Laravel</span>
-      <span className="orbit-badge orbit-3">Tailwind</span>
-      <span className="hero-status">
-        <span className="hero-status-dot" /> Open to work
-      </span>
-    </div>
-  )
-}
-
-/* Two tech strips that run in opposite directions and speed up (and lean) with scroll speed */
-function Marquee({ items }) {
-  const rowA = useRef(null)
-  const rowB = useRef(null)
-  const loop = [...items, ...items, ...items, ...items]
-
-  useEffect(() => {
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    let x = 0
-    let last = window.scrollY
-    let vel = 0
-    let raf
-
-    const tick = () => {
-      const y = window.scrollY
-      vel = vel * 0.92 + (y - last) * 0.08
-      last = y
-      const a = rowA.current
-      const b = rowB.current
-      if (a && b) {
-        x += reduce ? 0 : 0.5 + Math.abs(vel) * 0.7
-        const w = a.scrollWidth / 2
-        const off = x % w
-        const skew = reduce ? 0 : Math.max(-14, Math.min(14, -vel * 0.8))
-        a.style.transform = `translateX(${-off}px) skewX(${skew}deg)`
-        b.style.transform = `translateX(${off - w}px) skewX(${skew}deg)`
-      }
-      raf = requestAnimationFrame(tick)
-    }
-    raf = requestAnimationFrame(tick)
-    return () => cancelAnimationFrame(raf)
-  }, [])
-
-  const row = (ref, cls) => (
-    <div className={`marquee-track ${cls}`} ref={ref}>
-      {loop.map((item, i) => (
-        <span key={i} className="marquee-item">
-          {item}
-          <span className="marquee-dot">✦</span>
-        </span>
-      ))}
-    </div>
-  )
-
-  return (
-    <div className="marquee" aria-hidden="true">
-      {row(rowA, 'marquee-a')}
-      {row(rowB, 'marquee-b')}
-    </div>
-  )
-}
-
-/* Writes scroll position into CSS variables so the stylesheet can animate with scroll:
-   --scroll-y (px), --scroll (0-1 page), --hero-p (0-1 through the hero), --tl (per timeline) */
-function useScrollEffects() {
-  useEffect(() => {
-    const root = document.documentElement
-    let ticking = false
-
-    const update = () => {
-      ticking = false
-      const y = window.scrollY
-      const max = Math.max(root.scrollHeight - window.innerHeight, 1)
-      root.style.setProperty('--scroll-y', y.toFixed(1))
-      root.style.setProperty('--scroll', (y / max).toFixed(4))
-      root.style.setProperty('--hero-p', Math.min(y / (window.innerHeight * 0.9), 1).toFixed(4))
-      document.querySelectorAll('.timeline').forEach((tl) => {
-        const r = tl.getBoundingClientRect()
-        const p = (window.innerHeight * 0.7 - r.top) / r.height
-        tl.style.setProperty('--tl', Math.min(Math.max(p, 0), 1).toFixed(4))
-      })
-    }
-
-    const onScroll = () => {
-      if (!ticking) {
-        ticking = true
-        requestAnimationFrame(update)
-      }
-    }
-
-    window.addEventListener('scroll', onScroll, { passive: true })
-    window.addEventListener('resize', onScroll)
-    update()
-    return () => {
-      window.removeEventListener('scroll', onScroll)
-      window.removeEventListener('resize', onScroll)
-    }
-  }, [])
-}
-
-/* Staggered reveal for sections, cards, timeline entries and contact items */
-function useRevealOnScroll(
-  selector = '.section-header, .timeline-entry, .education-card, .resume-box, .contact-item, .social-card, .footer-content'
-) {
-  useEffect(() => {
-    const els = Array.from(document.querySelectorAll(selector))
-    els.forEach((el) => {
-      const siblings = Array.from(el.parentElement.children).filter((c) => c.matches(selector))
-      el.style.setProperty('--d', `${Math.min(siblings.indexOf(el), 6) * 100}ms`)
-      el.classList.add('rv')
-    })
-    const io = new IntersectionObserver(
-      (entries) =>
-        entries.forEach((e) => {
-          if (e.isIntersecting) {
-            e.target.classList.add('rv-in')
-            io.unobserve(e.target)
-          }
-        }),
-      { threshold: 0.15, rootMargin: '0px 0px -60px 0px' }
-    )
-    els.forEach((el) => io.observe(el))
-    return () => io.disconnect()
-  }, [selector])
-}
-
-const PALETTES = [
-  { id: 'aurora', name: 'Aurora', a: '#2dd4bf', b: '#f472b6' },
-  { id: 'sunset', name: 'Sunset', a: '#fb923c', b: '#f43f5e' },
-  { id: 'ocean', name: 'Ocean', a: '#38bdf8', b: '#818cf8' },
-  { id: 'lime', name: 'Lime Pulse', a: '#a3e635', b: '#22d3ee' }
-]
-
-/* Floating palette switcher; remembers the choice in this browser */
-function ThemePicker() {
-  const [open, setOpen] = useState(false)
-  const [palette, setPalette] = useState(() => {
-    try {
-      return localStorage.getItem('rm-palette') || 'aurora'
-    } catch {
-      return 'aurora'
-    }
-  })
-
-  useEffect(() => {
-    document.documentElement.setAttribute('data-palette', palette)
-    try {
-      localStorage.setItem('rm-palette', palette)
-    } catch {
-      /* storage unavailable */
-    }
-  }, [palette])
-
-  return (
-    <div className={`theme-picker ${open ? 'open' : ''}`}>
-      <div className="theme-picker-options">
-        {PALETTES.map((p) => (
-          <button
-            key={p.id}
-            className={`theme-swatch ${palette === p.id ? 'active' : ''}`}
-            style={{ background: `linear-gradient(135deg, ${p.a} 50%, ${p.b} 50%)` }}
-            onClick={() => setPalette(p.id)}
-            aria-label={`${p.name} colour theme`}
-            title={p.name}
-          />
-        ))}
-      </div>
-      <button
-        className="theme-picker-toggle"
-        onClick={() => setOpen((v) => !v)}
-        aria-label="Change colour theme"
-        aria-expanded={open}
-        title="Change colour theme"
-      >
-        ◐
-      </button>
-    </div>
-  )
-}
-
-/* Floating button that appears after scrolling */
-function BackToTop() {
-  const [visible, setVisible] = useState(false)
-
-  useEffect(() => {
-    const onScroll = () => setVisible(window.scrollY > 600)
-    window.addEventListener('scroll', onScroll)
-    onScroll()
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
-
-  return (
-    <button
-      className={`back-to-top ${visible ? 'show' : ''}`}
-      onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-      aria-label="Back to top"
-    >
-      ↑
-    </button>
-  )
-}
-
 const SkillIcon = ({ skillName }) => {
   const iconColors = {
     'JavaScript': '#F7DF1E',
@@ -515,9 +138,6 @@ function App() {
 
   const particlesRef = useRef(null)
 
-  useScrollEffects()
-  useRevealOnScroll()
-
   useEffect(() => {
     // Enhanced loading animation
     const timer = setTimeout(() => {
@@ -634,9 +254,6 @@ function App() {
       )}
 
       <div className="portfolio">
-        {/* Ambient colour blobs that drift as you scroll */}
-        <div className="ambient" aria-hidden="true"><i></i><i></i><i></i></div>
-
         {/* Floating Particles Background */}
         <div className="particles-container" ref={particlesRef}></div>
 
@@ -755,43 +372,50 @@ function App() {
                 <span className="title-accent fade-in">Mirza</span>
               </h1>
               <div className="hero-subtitle fade-in">
-                <span className="subtitle-text">
-                  <Typewriter words={['Full Stack Developer', 'Laravel Expert', 'React Developer', 'UI Craftsman']} />
-                </span>
+                <span className="subtitle-text">Full Stack Developer</span>
                 {/* <span className="subtitle-cursor">|</span> */}
               </div>
               <p className="hero-description fade-in">
                 Crafting digital experiences with modern technologies and creative solutions
               </p>
               <div className="hero-actions fade-in">
-                <MagneticButton className="btn btn-primary" onClick={() => scrollToSection('projects')}>
+                <button className="btn btn-primary" onClick={() => scrollToSection('projects')}>
                   <span>View My Work</span>
                   <div className="btn-glow"></div>
-                </MagneticButton>
+                </button>
                 {/* <button className="btn btn-secondary" onClick={() => scrollToSection('resume')}>
                   <span>View Resume</span>
                 </button> */}
-                <MagneticButton className="btn btn-secondary" onClick={() => scrollToSection('contact')}>
+                <button className="btn btn-secondary" onClick={() => scrollToSection('contact')}>
                   <span>Get In Touch</span>
-                </MagneticButton>
+                </button>
               </div>
             </div>
 
             <div className="hero-visual">
               <div className="profile-container">
                 <div className="profile-glow"></div>
-                <HeroPhoto src="/images/profile.jpg" alt="Rameel Mirza" />
+                <div className="profile-image">
+                  <div className="profile-placeholder">
+                    <span className="profile-icon">👨‍💻</span>
+                    <div className="profile-particles">
+                      <div className="particle particle-1"></div>
+                      <div className="particle particle-2"></div>
+                      <div className="particle particle-3"></div>
+                    </div>
+                  </div>
+                </div>
                 <div className="profile-stats">
                   <div className="stat-item">
-                    <span className="stat-number"><CountUp value={4.5} suffix="+" decimals={1} /></span>
+                    <span className="stat-number">4.5+</span>
                     <span className="stat-label">Years</span>
                   </div>
                   <div className="stat-item">
-                    <span className="stat-number"><CountUp value={50} suffix="+" /></span>
+                    <span className="stat-number">50+</span>
                     <span className="stat-label">Projects</span>
                   </div>
                   <div className="stat-item">
-                    <span className="stat-number"><CountUp value={15} suffix="+" /></span>
+                    <span className="stat-number">15+</span>
                     <span className="stat-label">Skills</span>
                   </div>
                 </div>
@@ -808,8 +432,6 @@ function App() {
             </div>
           </div>
         </section>
-
-        <Marquee items={['Laravel', 'React', 'Next.js', 'Tailwind', 'PHP', 'JavaScript', 'REST APIs', 'WordPress', 'Shopify', 'MySQL']} />
 
         {/* About Section */}
         <section id="about" className="about-section">
@@ -849,21 +471,21 @@ function App() {
                   <div className="stat-card scale-in">
                     <div className="stat-icon">🚀</div>
                     <div className="stat-content">
-                      <h3><CountUp value={4.5} decimals={1} suffix="+" /></h3>
+                      <h3>4.5+</h3>
                       <p>Years Experience</p>
                     </div>
                   </div>
                   <div className="stat-card scale-in">
                     <div className="stat-icon">💼</div>
                     <div className="stat-content">
-                      <h3><CountUp value={50} suffix="+" /></h3>
+                      <h3>50+</h3>
                       <p>Projects Completed</p>
                     </div>
                   </div>
                   <div className="stat-card scale-in">
                     <div className="stat-icon">🎯</div>
                     <div className="stat-content">
-                      <h3><CountUp value={15} suffix="+" /></h3>
+                      <h3>15+</h3>
                       <p>Technologies Mastered</p>
                     </div>
                   </div>
@@ -892,7 +514,7 @@ function App() {
                   className="skill-item scale-in"
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
-                  <TiltCard className="skill-card" max={8}>
+                  <div className="skill-card">
                     <div className="skill-header">
                       <span className="skill-icon"><SkillIcon skillName={skill.name} /></span>
                       <span className="skill-name">{skill.name}</span>
@@ -900,11 +522,11 @@ function App() {
                     <div className="skill-progress">
                       <div
                         className="progress-bar"
-                        style={{ '--level': `${skill.level}%` }}
+                        style={{ width: `${skill.level}%` }}
                       ></div>
                     </div>
                     <span className="skill-level">{skill.level}%</span>
-                  </TiltCard>
+                  </div>
                 </div>
               ))}
             </div>
@@ -928,7 +550,7 @@ function App() {
                   className="project-item scale-in"
                   style={{ animationDelay: `${index * 0.2}s` }}
                 >
-                  <TiltCard className="project-card" max={6}>
+                  <div className="project-card">
                     <div className="project-visual">
                       <div className="project-image">
                         {project.image && /\.(png|jpe?g|svg|webp)$/i.test(project.image) ? (
@@ -957,7 +579,7 @@ function App() {
                         ))}
                       </div>
                     </div>
-                  </TiltCard>
+                  </div>
                 </div>
               ))}
             </div>
@@ -1048,9 +670,6 @@ function App() {
             </div>
           </div>
         </footer>
-
-        <ThemePicker />
-        <BackToTop />
 
         {/* Floating WhatsApp Widget */}
         <div className="whatsapp-widget-container">

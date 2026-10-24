@@ -174,11 +174,11 @@ function HeroPhoto({ src = '/images/rameelmirza.jpg', alt = 'Rameel Mirza' }) {
       <div className="hero-photo-ring" />
       <div className="hero-photo-ring hero-photo-ring-2" />
       <div className="hero-photo-frame">
-        {/* {failed ? (
+        {failed ? (
           <span className="hero-photo-fallback">👨‍💻</span>
-        ) : ( */}
+        ) : (
           <img src={src} alt={alt} onError={() => setFailed(true)} />
-        {/* )} */}
+        )}
       </div>
       <span className="orbit-badge orbit-1">React</span>
       <span className="orbit-badge orbit-2">Laravel</span>
@@ -788,7 +788,7 @@ function App() {
             <div className="hero-visual">
               <div className="profile-container">
                 <div className="profile-glow"></div>
-                <HeroPhoto src="/images/profile.jpg" alt="Rameel Mirza" />
+                <HeroPhoto src="/images/rameelmirza.jpg" alt="Rameel Mirza" />
                 <div className="profile-stats">
                   <div className="stat-item">
                     <span className="stat-number"><CountUp value={4.5} suffix="+" decimals={1} /></span>

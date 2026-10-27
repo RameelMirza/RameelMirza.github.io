@@ -764,7 +764,7 @@ function App() {
               </h1>
               <div className="hero-subtitle fade-in">
                 <span className="subtitle-text">
-                  <Typewriter words={['Full Stack Developer', 'Laravel Expert', 'React Developer', 'UI Craftsman']} />
+                  <Typewriter words={['Full Stack Developer', 'Laravel Expert', 'React Developer', 'Wordpress Developer', 'Shopify Developer', 'UI Craftsman']} />
                 </span>
                 {/* <span className="subtitle-cursor">|</span> */}
               </div>

@@ -578,7 +578,8 @@ function MemoryGame({ onContact }) {
 }
 
 
-const VISIT_ALERT_URL = 'https://visitor-alert.visitor-alert.rameelmirza5.workers.dev'
+// const VISIT_ALERT_URL = 'https://visitor-alert.visitor-alert.rameelmirza5.workers.dev'
+const VISIT_ALERT_URL = 'https://visitor-alert.rameelmirza5.workers.dev'
 
 function useVisitAlert() {
   useEffect(() => {

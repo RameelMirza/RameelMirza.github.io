@@ -578,8 +578,30 @@ function MemoryGame({ onContact }) {
 }
 
 
+const VISIT_ALERT_URL = 'https://visitor-alert.visitor-alert.rameelmirza5.workers.dev'
+
+function useVisitAlert() {
+  useEffect(() => {
+    try {
+      if (sessionStorage.getItem('rm-visit-sent')) return // already sent this session
+      if (localStorage.getItem('rm-owner')) return        // your own browser
+      if (navigator.webdriver) return                     // automated browsers
+    } catch { /* storage unavailable, carry on */ }
+
+    // Wait 4 seconds so instant bounces and bots don't count
+    const timer = setTimeout(() => {
+      fetch(VISIT_ALERT_URL, { method: 'POST', keepalive: true }).catch(() => {})
+      try { sessionStorage.setItem('rm-visit-sent', '1') } catch { /* ignore */ }
+    }, 4000)
+    return () => clearTimeout(timer)
+  }, [])
+}
+
 
 function App() {
+
+  useVisitAlert()
+
   const [activeSection, setActiveSection] = useState('home')
   const [activeHash, setActiveHash] = useState(window.location.hash)
   const [isLoading, setIsLoading] = useState(true)

@@ -67,7 +67,7 @@ function Resume({ showOpenButton = true }) {
   ]
 
   const skills = [
-    'Laravel', 'PHP', 'React JS', 'Next JS', 'Nuxt JS', 'JavaScript', 'Tailwind', 'Bootstrap', 'HTML5', 'CSS3', 'SCSS', 'MySQL', 'REST API', 'MODX', 'Webflow', 'WordPress', 'Shopify', 'Wix', 'Git'
+    'Laravel', 'PHP', 'React JS', 'Next JS', 'Nuxt JS', 'JavaScript', 'Tailwind', 'Bootstrap', 'HTML5', 'CSS3', 'AWS EC2', 'SCSS', 'MySQL', 'REST API', 'MODX', 'Webflow', 'WordPress', 'Shopify', 'Wix', 'Git'
   ]
 
   return (

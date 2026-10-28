@@ -2622,7 +2622,7 @@ footer .footer-brand .brand-text {margin-right: 0;}
 .resume-box, .timeline-entry, .education-card {
   transition: transform .3s ease, border-color .3s ease, box-shadow .3s ease;
 }
-.timeline-entry:hover { transform: translateX(8px); }
+/* .timeline-entry:hover { transform: translateX(8px); } */
 .timeline-entry:hover .timeline-marker { box-shadow: 0 0 0 6px rgb(var(--c1-rgb) / .3), 0 0 18px var(--c1); }
 .education-card:hover { transform: translateY(-6px); border-color: rgb(var(--c1-rgb) / .4); box-shadow: 0 14px 30px rgba(0,0,0,.35); }
 .resume-skill-pill { transition: transform .25s ease, background .25s ease; }

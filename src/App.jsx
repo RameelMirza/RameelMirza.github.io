@@ -590,9 +590,18 @@ function useVisitAlert() {
     } catch { /* storage unavailable, carry on */ }
 
     // Wait 4 seconds so instant bounces and bots don't count
+    // const timer = setTimeout(() => {
+    //   fetch(VISIT_ALERT_URL, { method: 'POST', keepalive: true }).catch(() => {})
+    //   try { sessionStorage.setItem('rm-visit-sent', '1') } catch { /* ignore */ }
+    // }, 4000)
     const timer = setTimeout(() => {
-      fetch(VISIT_ALERT_URL, { method: 'POST', keepalive: true }).catch(() => {})
-      try { sessionStorage.setItem('rm-visit-sent', '1') } catch { /* ignore */ }
+      fetch(VISIT_ALERT_URL, { method: 'POST', keepalive: true })
+        .then((r) => {
+          if (r.ok) {
+            try { sessionStorage.setItem('rm-visit-sent', '1') } catch { /* ignore */ }
+          }
+        })
+        .catch(() => {})
     }, 4000)
     return () => clearTimeout(timer)
   }, [])

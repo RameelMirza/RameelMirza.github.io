@@ -1,3 +1,33 @@
+@font-face {
+  font-family: "orbitron-regular";
+  src: url('./fonts/Orbitron-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: "orbitron-bold";
+  src: url('./fonts/Orbitron-Bold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: "orbitron-semibold";
+  src: url('./fonts/Orbitron-SemiBold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: "broken-horizon";
+  src: url('./fonts/broken-horizon/broken-horizon.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: "rush-driver";
+  src: url('./fonts/rush-driver/rush-driver.otf') format('opentype');
+}
+
+@font-face {
+  font-family: "rocket-raccoon";
+  src: url('./fonts/rocket-raccoon/rocket-raccoon.ttf') format('truetype');
+}
+
 /* Enhanced Portfolio Styles with Full Animations */
 
 .portfolio {
@@ -224,15 +254,15 @@
   display: flex;
   align-items: center;
   cursor: pointer;
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   font-weight: 700;
 }
 
 .nav-brand-logo {
-  width: 36px;
-  height: 36px;
+  width: 45px;
+  height: 45px;
   object-fit: contain;
-  margin-right: 10px;
+  margin-right: 8px;
 }
 
 .brand-text {
@@ -241,10 +271,12 @@
   -webkit-text-fill-color: transparent;
   background-clip: text;
   margin-right: 8px;
+  font-family: 'rocket-raccoon', sans-serif;
 }
 
 .brand-accent {
   color: #e2e8f0;
+  font-family: 'rocket-raccoon', sans-serif;
 }
 
 .nav-menu {

@@ -631,7 +631,7 @@ function App() {
         <div className="loading">
           <div className="loading-content">
             <div className="loading-logo">
-              <img src="/images/logo.png" alt="Rameel Mirza" className="loading-logo-image" />
+              <img src="/images/logo_new.svg" alt="Rameel Mirza" className="loading-logo-image" />
               {/* <div className="loading-spinner"></div> */}
             </div>
             <div className="loading-progress">
@@ -664,7 +664,7 @@ function App() {
         <nav className={`navbar ${navbarScrolled ? 'scrolled' : ''}`}>
           <div className="nav-container">
             <div className="nav-brand" onClick={() => scrollToSection('home')}>
-              <img src="/images/logo.png" alt="Rameel Mirza" className="nav-brand-logo" />
+              <img src="/images/logo_new.svg" alt="Rameel Mirza" className="nav-brand-logo" />
               <span className="brand-text">Rameel</span>
               <span className="brand-accent">Mirza</span>
             </div>

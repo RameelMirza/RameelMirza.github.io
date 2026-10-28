@@ -435,6 +435,150 @@ const SkillIcon = ({ skillName }) => {
   return Icon ? <span style={{ color }}>{Icon}</span> : null
 }
 
+
+
+/* ===== Memory game: match the pairs of tech icons ===== */
+const GAME_PAIRS = ['React', 'PHP Laravel', 'JavaScript', 'Tailwind CSS', 'Shopify', 'Git']
+
+const makeDeck = () => {
+  const cards = [...GAME_PAIRS, ...GAME_PAIRS].map((name, key) => ({ key, name }))
+  for (let i = cards.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[cards[i], cards[j]] = [cards[j], cards[i]]
+  }
+  return cards
+}
+
+function MemoryGame({ onContact }) {
+  const [deck, setDeck] = useState(makeDeck)
+  const [open, setOpen] = useState([])
+  const [done, setDone] = useState([])
+  const [moves, setMoves] = useState(0)
+  const [secs, setSecs] = useState(0)
+  const [started, setStarted] = useState(false)
+  const [best, setBest] = useState(() => {
+    try {
+      return JSON.parse(localStorage.getItem('rm-memory-best'))
+    } catch {
+      return null
+    }
+  })
+  const lock = useRef(false)
+  const timers = useRef([])
+  const won = done.length === GAME_PAIRS.length
+
+  useEffect(() => {
+    if (!started || won) return
+    const id = setInterval(() => setSecs((s) => s + 1), 1000)
+    return () => clearInterval(id)
+  }, [started, won])
+
+  useEffect(() => {
+    if (!won) return
+    const better = !best || moves < best.moves || (moves === best.moves && secs < best.secs)
+    if (better) {
+      const next = { moves, secs }
+      setBest(next)
+      try {
+        localStorage.setItem('rm-memory-best', JSON.stringify(next))
+      } catch {
+        /* storage unavailable */
+      }
+    }
+  }, [won])
+
+  useEffect(() => () => timers.current.forEach(clearTimeout), [])
+
+  const pick = (i) => {
+    if (lock.current || open.includes(i) || done.includes(deck[i].name)) return
+    if (!started) setStarted(true)
+    const next = [...open, i]
+    setOpen(next)
+    if (next.length === 2) {
+      setMoves((m) => m + 1)
+      lock.current = true
+      const [a, b] = next
+      if (deck[a].name === deck[b].name) {
+        timers.current.push(setTimeout(() => {
+          setDone((d) => [...d, deck[a].name])
+          setOpen([])
+          lock.current = false
+        }, 450))
+      } else {
+        timers.current.push(setTimeout(() => {
+          setOpen([])
+          lock.current = false
+        }, 850))
+      }
+    }
+  }
+
+  const restart = () => {
+    timers.current.forEach(clearTimeout)
+    timers.current = []
+    lock.current = false
+    setDeck(makeDeck())
+    setOpen([])
+    setDone([])
+    setMoves(0)
+    setSecs(0)
+    setStarted(false)
+  }
+
+  const fmt = (s) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`
+  const stars = moves <= 9 ? 3 : moves <= 14 ? 2 : 1
+
+  return (
+    <div className="game">
+      <div className="game-stats">
+        <div className="game-stat"><span>Moves</span><strong>{moves}</strong></div>
+        <div className="game-stat"><span>Time</span><strong>{fmt(secs)}</strong></div>
+        <div className="game-stat"><span>Pairs</span><strong>{done.length}/{GAME_PAIRS.length}</strong></div>
+        <div className="game-stat"><span>Best</span><strong>{best ? `${best.moves} moves` : '–'}</strong></div>
+      </div>
+
+      <div className="game-board">
+        {deck.map((card, i) => {
+          const matched = done.includes(card.name)
+          const up = matched || open.includes(i)
+          return (
+            <button
+              key={card.key}
+              className={`mem-card ${up ? 'up' : ''} ${matched ? 'matched' : ''}`}
+              onClick={() => pick(i)}
+              aria-label={up ? card.name : 'Hidden card'}
+              aria-pressed={up}
+            >
+              <span className="mem-inner">
+                <span className="mem-face mem-back"><span className="mem-mark">?</span></span>
+                <span className="mem-face mem-front">
+                  <span className="mem-icon"><SkillIcon skillName={card.name} /></span>
+                  <span className="mem-label">{card.name.replace('PHP ', '')}</span>
+                </span>
+              </span>
+            </button>
+          )
+        })}
+      </div>
+
+      <div className="game-actions">
+        <button className="btn btn-secondary" onClick={restart}><span>{won ? 'Play again' : 'Shuffle & restart'}</span></button>
+      </div>
+
+      {won && (
+        <div className="game-win" role="status">
+          <div className="game-win-stars">{'★'.repeat(stars)}<i>{'★'.repeat(3 - stars)}</i></div>
+          <h3>Stack matched in {moves} moves</h3>
+          <p>Finished in {fmt(secs)}. Enjoyed the game? I build things like this for clients too.</p>
+          <button className="btn btn-primary" onClick={onContact}><span>Let's work together</span></button>
+        </div>
+      )}
+    </div>
+  )
+}
+
+
+
 function App() {
   const [activeSection, setActiveSection] = useState('home')
   const [activeHash, setActiveHash] = useState(window.location.hash)
@@ -546,7 +690,7 @@ function App() {
       setNavbarScrolled(scrollTop > 50)
 
       // Update active section
-      const sections = ['home', 'about', 'resume', 'skills', 'projects', 'contact']
+      const sections = ['home', 'about', 'resume', 'skills', 'projects', 'play', 'contact']
       const currentSection = sections.find(section => {
         const element = document.getElementById(section)
         if (element) {
@@ -675,6 +819,7 @@ function App() {
                 { id: 'resume', label: 'Resume' },
                 { id: 'skills', label: 'Skills' },
                 { id: 'projects', label: 'Projects' },
+                { id: 'play', label: 'Play' },
                 { id: 'contact', label: 'Contact' }
               ].map((item) => (
                 <li key={item.id}>
@@ -728,6 +873,7 @@ function App() {
               { id: 'resume', label: 'Resume' },
               { id: 'skills', label: 'Skills' },
               { id: 'projects', label: 'Projects' },
+              { id: 'play', label: 'Play' },
               { id: 'contact', label: 'Contact' }
             ].map((item) => (
               <li key={item.id} className="mobile-menu-item">
@@ -971,6 +1117,22 @@ function App() {
             </div>
           </div>
         </section>
+
+
+        {/* Game Section */}
+        <section id="play" className="game-section">
+          <div className="container">
+            <div className="section-header">
+              <h2 className="section-title">
+                <span className="title-accent">Match</span> the Stack
+              </h2>
+              <div className="title-underline"></div>
+              <p className="game-intro">Flip the cards and pair up the technologies I work with. Fewer moves, more stars.</p>
+            </div>
+            <MemoryGame onContact={() => scrollToSection('contact')} />
+          </div>
+        </section>
+
 
         {/* Contact Section */}
         <section id="contact" className="contact-section">

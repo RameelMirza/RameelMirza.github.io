@@ -2843,3 +2843,92 @@ footer .footer-brand .brand-text {margin-right: 0;}
   .rv { opacity: 1; translate: 0 0; }
   .hero-content, .hero-visual, .ambient i { transform: none; translate: none; scale: none; rotate: none; opacity: 1; }
 }
+
+
+
+
+/* Game Section */
+
+/* =====================================================================
+   Memory game
+   ===================================================================== */
+.mobile-menu.open .mobile-menu-item:nth-child(7) { animation-delay: 0.42s; }
+
+.game-section {
+  padding: 120px 0;
+  background: linear-gradient(135deg, rgb(var(--bg0-rgb) / .5) 0%, rgb(var(--bg1-rgb) / .5) 100%);
+}
+.game-intro { margin-top: 18px; color: #94a3b8; font-size: 1.05rem; }
+.game { max-width: 620px; margin: 0 auto; display: grid; gap: 28px; }
+
+.game-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.game-stat {
+  display: grid; gap: 2px; text-align: center;
+  padding: 12px 8px;
+  border-radius: 14px;
+  background: rgb(var(--bg1-rgb) / .8);
+  border: 1px solid rgb(148 163 184 / .12);
+}
+.game-stat span { font-size: .72rem; letter-spacing: 1px; text-transform: uppercase; color: #94a3b8; }
+.game-stat strong { font-size: 1.15rem; color: #e2e8f0; font-variant-numeric: tabular-nums; }
+
+.game-board { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.mem-card {
+  aspect-ratio: 1;
+  padding: 0; border: 0; background: none;
+  perspective: 700px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.mem-card:focus-visible { outline: 2px solid var(--c1); outline-offset: 3px; border-radius: 16px; }
+.mem-inner {
+  position: relative; display: block;
+  width: 100%; height: 100%;
+  transform-style: preserve-3d;
+  transition: transform .5s cubic-bezier(.22, 1, .36, 1);
+}
+.mem-card.up .mem-inner { transform: rotateY(180deg); }
+.mem-face {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+  border-radius: 16px;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.mem-back {
+  background: linear-gradient(135deg, rgb(var(--c1-rgb) / .22), rgb(var(--c2-rgb) / .22));
+  border: 1px solid rgb(var(--c1-rgb) / .4);
+  transition: border-color .25s ease, box-shadow .25s ease;
+}
+.mem-card:hover .mem-back { border-color: var(--c1); box-shadow: 0 8px 24px rgb(var(--c1-rgb) / .25); }
+.mem-mark { font-size: 2rem; font-weight: 800; color: var(--c1); opacity: .8; }
+.mem-front {
+  transform: rotateY(180deg);
+  background: rgb(var(--bg1-rgb));
+  border: 1px solid rgb(148 163 184 / .2);
+}
+.mem-card.matched .mem-front { border-color: var(--c1); box-shadow: 0 0 22px rgb(var(--c1-rgb) / .4); }
+.mem-icon { font-size: 2rem; line-height: 1; display: flex; }
+.mem-label { font-size: .7rem; font-weight: 600; color: #cbd5e1; text-align: center; padding: 0 4px; }
+
+.game-actions { display: flex; justify-content: center; }
+
+.game-win {
+  text-align: center;
+  display: grid; justify-items: center; gap: 10px;
+  padding: 28px 20px;
+  border-radius: 22px;
+  background: linear-gradient(135deg, rgb(var(--c1-rgb) / .14), rgb(var(--c2-rgb) / .14));
+  border: 1px solid rgb(var(--c1-rgb) / .45);
+  animation: scaleIn .5s ease-out both;
+}
+.game-win-stars { font-size: 1.8rem; letter-spacing: 6px; color: var(--c1); }
+.game-win-stars i { font-style: normal; opacity: .25; }
+.game-win h3 { font-size: 1.5rem; color: #e2e8f0; }
+.game-win p { color: #cbd5e1; max-width: 420px; margin-bottom: 8px; }
+
+@media (max-width: 480px) {
+  .game-board { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .game-stats { grid-template-columns: repeat(2, 1fr); }
+  .game-section { padding: 80px 0; }
+}

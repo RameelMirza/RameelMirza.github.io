@@ -475,6 +475,7 @@ function MemoryGame({ onContact }) {
 
   useEffect(() => {
     if (!won) return
+      visit.game = { moves, secs }
     const better = !best || moves < best.moves || (moves === best.moves && secs < best.secs)
     if (better) {
       const next = { moves, secs }
@@ -492,6 +493,7 @@ function MemoryGame({ onContact }) {
   const pick = (i) => {
     if (lock.current || open.includes(i) || done.includes(deck[i].name)) return
     if (!started) setStarted(true)
+    visit.gameStarted = true
     const next = [...open, i]
     setOpen(next)
     if (next.length === 2) {
@@ -578,34 +580,143 @@ function MemoryGame({ onContact }) {
 }
 
 
-// const VISIT_ALERT_URL = 'https://visitor-alert.visitor-alert.rameelmirza5.workers.dev'
+// const VISIT_ALERT_URL = 'https://visitor-alert.rameelmirza5.workers.dev'
+
+// function useVisitAlert() {
+//   useEffect(() => {
+//     try {
+//       if (sessionStorage.getItem('rm-visit-sent')) return // already sent this session
+//       if (localStorage.getItem('rm-owner')) return        // your own browser
+//       if (navigator.webdriver) return                     // automated browsers
+//     } catch { /* storage unavailable, carry on */ }
+
+//     // Wait 4 seconds so instant bounces and bots don't count
+//     // const timer = setTimeout(() => {
+//     //   fetch(VISIT_ALERT_URL, { method: 'POST', keepalive: true }).catch(() => {})
+//     //   try { sessionStorage.setItem('rm-visit-sent', '1') } catch { /* ignore */ }
+//     // }, 4000)
+//     const timer = setTimeout(() => {
+//       fetch(VISIT_ALERT_URL, { method: 'POST', keepalive: true })
+//         .then((r) => {
+//           if (r.ok) {
+//             try { sessionStorage.setItem('rm-visit-sent', '1') } catch { /* ignore */ }
+//           }
+//         })
+//         .catch(() => {})
+//     }, 4000)
+//     return () => clearTimeout(timer)
+//   }, [])
+// }
+
+
+// New visit alert function
+
 const VISIT_ALERT_URL = 'https://visitor-alert.rameelmirza5.workers.dev'
+const TRACKED_SECTIONS = ['home', 'about', 'resume', 'skills', 'projects', 'play', 'contact']
+
+// Filled in while the visitor browses, sent once when they leave
+const visit = { sections: [], clicks: [], gameStarted: false, game: null }
 
 function useVisitAlert() {
   useEffect(() => {
     try {
-      if (sessionStorage.getItem('rm-visit-sent')) return // already sent this session
+      if (sessionStorage.getItem('rm-visit-sent')) return // already reported in this tab
       if (localStorage.getItem('rm-owner')) return        // your own browser
       if (navigator.webdriver) return                     // automated browsers
     } catch { /* storage unavailable, carry on */ }
 
-    // Wait 4 seconds so instant bounces and bots don't count
-    // const timer = setTimeout(() => {
-    //   fetch(VISIT_ALERT_URL, { method: 'POST', keepalive: true }).catch(() => {})
-    //   try { sessionStorage.setItem('rm-visit-sent', '1') } catch { /* ignore */ }
-    // }, 4000)
-    const timer = setTimeout(() => {
-      fetch(VISIT_ALERT_URL, { method: 'POST', keepalive: true })
+    let sent = false
+    let active = 0
+    let visibleSince = document.visibilityState === 'visible' ? Date.now() : 0
+    const activeSecs = () => (active + (visibleSince ? Date.now() - visibleSince : 0)) / 1000
+
+    // Sections the visitor actually reached
+    const io = new IntersectionObserver(
+      (entries) =>
+        entries.forEach((e) => {
+          if (e.isIntersecting && !visit.sections.includes(e.target.id)) visit.sections.push(e.target.id)
+        }),
+      { threshold: 0.35 }
+    )
+    TRACKED_SECTIONS.forEach((id) => {
+      const el = document.getElementById(id)
+      if (el) io.observe(el)
+    })
+
+    // Project, social and WhatsApp clicks
+    const onClick = (e) => {
+      const t = e.target
+      if (!(t instanceof Element) || visit.clicks.length >= 15) return
+      let label = ''
+      const link = t.closest('.project-link')
+      if (link) {
+        const title = link.closest('.project-card')?.querySelector('.project-title')?.textContent.trim()
+        label = `${link.textContent.trim()}: ${title || 'project'}`
+      } else if (t.closest('.social-card')) {
+        label = `Social: ${t.closest('.social-card').querySelector('.social-name')?.textContent.trim()}`
+      } else if (t.closest('.whatsapp-widget-btn')) {
+        label = 'Opened WhatsApp chat'
+      }
+      if (label && !visit.clicks.includes(label)) visit.clicks.push(label)
+    }
+    document.addEventListener('click', onClick, true)
+
+    const send = () => {
+      if (sent) return
+      const secs = Math.round(activeSecs())
+      if (secs < 4) return // ignore instant bounces
+      sent = true
+
+      const params = new URLSearchParams(window.location.search)
+      let ref = ''
+      try { ref = document.referrer ? new URL(document.referrer).hostname.replace(/^www\./, '') : '' } catch { /* ignore */ }
+
+      const body = JSON.stringify({
+        secs,
+        ref,
+        src: params.get('ref') || params.get('utm_source') || '',
+        sections: visit.sections,
+        clicks: visit.clicks,
+        game: visit.gameStarted ? visit.game || { started: true } : null,
+        screen: `${window.screen.width}x${window.screen.height}`,
+        lang: navigator.language,
+        touch: navigator.maxTouchPoints > 0
+      })
+
+      try { sessionStorage.setItem('rm-visit-sent', '1') } catch { /* ignore */ }
+      // text/plain avoids a CORS preflight, which can be dropped while the page is closing
+      fetch(VISIT_ALERT_URL, { method: 'POST', keepalive: true, headers: { 'Content-Type': 'text/plain' }, body })
         .then((r) => {
-          if (r.ok) {
-            try { sessionStorage.setItem('rm-visit-sent', '1') } catch { /* ignore */ }
-          }
+          if (!r.ok) { try { sessionStorage.removeItem('rm-visit-sent') } catch { /* ignore */ } }
         })
-        .catch(() => {})
-    }, 4000)
-    return () => clearTimeout(timer)
+        .catch(() => {
+          try { sessionStorage.removeItem('rm-visit-sent') } catch { /* ignore */ }
+        })
+    }
+
+    const onVisibility = () => {
+      if (document.visibilityState === 'hidden') {
+        if (visibleSince) active += Date.now() - visibleSince
+        visibleSince = 0
+        send()
+      } else {
+        visibleSince = Date.now()
+      }
+    }
+    document.addEventListener('visibilitychange', onVisibility)
+    window.addEventListener('pagehide', send)
+    const fallback = setTimeout(send, 120000) // still here after 2 minutes: report anyway
+
+    return () => {
+      io.disconnect()
+      document.removeEventListener('click', onClick, true)
+      document.removeEventListener('visibilitychange', onVisibility)
+      window.removeEventListener('pagehide', send)
+      clearTimeout(fallback)
+    }
   }, [])
 }
+
 
 
 function App() {
